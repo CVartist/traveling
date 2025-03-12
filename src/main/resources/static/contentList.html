@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/element-ui/2.15.9/theme-chalk/index.css">
+    <style>
+        body{
+            background-color: rgb(241,242,243);
+        }
+        .el-header{
+            background-color: white;
+        }
+        .center{width: 1200px;margin: 0 auto}
+        footer h3{
+            color: white;
+        }
+        #footer_center p{
+            margin: 0;
+        }
+
+        .title_p{
+            height: 40px;
+            overflow: hidden;
+            /*设置超出的部分用省略号展示*/
+            display: -webkit-box;
+            -webkit-line-clamp:2; /*设置显示的行数*/
+            -webkit-box-orient: vertical;  /*设置纵向排列*/
+        }
+
+        a{
+            text-decoration: none;
+            color: black;
+        }
+        a:hover{
+            color: orange;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <el-container>
+        <my-header></my-header>
+        <el-main class="center" style="margin-top: 30px">
+            <!--食谱开始-->
+                <el-row gutter="20">
+                    <el-col span="6" v-for="item in contentArr">
+                        <el-card style="margin: 10px 0">
+                            <a :href="'/detail.html?id='+item.id">
+                                <img :src="item.imgUrl" width="100%" height="144">
+                                <p class="title_p">{{item.title}}</p>
+                            </a>
+
+                            <el-row>
+                                <el-col span="4">
+                                    <el-avatar size="small" :src="item.userImgUrl"></el-avatar>
+                                </el-col>
+                                <el-col span="10">{{item.nickName}}</el-col>
+                                <el-col span="10">
+                                    <span style="float: right;
+                                    font-size: 12px;color: #666">{{item.categoryName}}</span>
+                                </el-col>
+                            </el-row>
+                        </el-card>
+                    </el-col>
+                </el-row>
+            <!--食谱结束-->
+        </el-main>
+        <el-footer style="background-color: #2f3234;
+        height: 280px;padding: 50px 0">
+            <div class="center" style="color: #666;text-align: center">
+                <el-row gutter="20">
+                    <el-col span="8">
+                        <img src="imgs/icon.png">
+                        <p>不知道道去哪儿就来我这里找</p>
+                        <p>旅游行业网络社区平台</p>
+                        <p>全国百城上千个景点等你来</p>
+                    </el-col>
+                    <el-col span="8">
+                        <el-row id="footer_center">
+                            <el-col span="8">
+                                <h3>关于我们</h3>
+                                <p>关于我们</p><p>旅游顾问</p>
+                                <p>旅游攻略</p><p>分类信息</p>
+                                <p>求职招聘</p><p>社区交流</p>
+                            </el-col>
+                            <el-col span="8">
+                                <h3>服务与支持</h3>
+                                <p>联系我们</p><p>广告投放</p>
+                                <p>用户协议</p><p>友情链接</p>
+                                <p>在线反馈</p><p>我发投稿</p>
+                            </el-col>
+                            <el-col span="8">
+                                <h3>底部导航</h3>
+                                <p>Archiver</p><p>手机版</p>
+                                <p>小黑屋</p>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col span="8">
+                        <div style="font-size: 60px;">
+                            <span style="color: orange">Travel</span>ing
+                        </div>
+                        <p>旅游行业网络社区平台</p>
+                    </el-col>
+                </el-row>
+            </div>
+        </el-footer>
+    </el-container>
+</div>
+</body>
+<!-- import Vue before Element -->
+<script src="https://cdn.staticfile.org/vue/2.6.14/vue.min.js"></script>
+<!-- import JavaScript -->
+<script src="https://cdn.staticfile.org/element-ui/2.15.9/index.min.js"></script>
+<!--引入Axios-->
+<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+<script src="js/my-header.js"></script>
+<script>
+    let v = new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                contentArr:[]
+            }
+        },
+        methods: {
+
+        },
+        created:function () {
+            if (location.search.includes("type")){
+                let type = new URLSearchParams(location.search).get("type");
+                axios.get("/v1/contents/"+type+"/list").then(function (response) {
+                    if (response.data.code==1){
+                        v.contentArr = response.data.data;
+                    }
+                })
+            }
+            //判断是否包含wd
+            if (location.search.includes("wd")){
+                let wd = new URLSearchParams(location.search).get("wd");
+                axios.get("/v1/contents/"+wd+"/search").then(function (response) {
+                    if (response.data.code==1){
+                        v.contentArr = response.data.data;
+                    }
+                })
+            }
+
+
+        }
+    })
+</script>
+</html>

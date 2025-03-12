@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.traveling.mapper.CategoryMapper">
+    <!--
+    如果条件只是type的话,那么会将一级分类以及二级分类一起查询出来,
+    所以我们应该连同level一起作为条件查询
+    -->
+    <select id="selectByType" resultType="com.example.traveling.pojo.vo.CategoryVO">
+        SELECT id, name
+        FROM t_category
+        WHERE type = #{type}
+          AND level = 2
+    </select>
+</mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.traveling.mapper.UserMapper">
+    <!--
+    id不需要录入,因为是主键
+    img_url不需要录入,因为头像的设置,实在注册后,修改信息时,才录入的
+    is_admin不需要录入,直接固定为0,因为注册用户默认是普通用户
+    -->
+    <insert id="insert">
+        INSERT INTO t_user(user_name, nick_name, password, is_admin, create_time)
+        VALUES (#{userName}, #{nickName}, #{password}, 0, #{createTime})
+    </insert>
+
+    <!--
+    因为这个方法后续还会使用
+    -->
+    <select id="selectByUserName" resultType="com.example.traveling.pojo.vo.UserVO">
+        SELECT id, user_name, nick_name, is_admin, img_url, password
+        FROM t_user
+        WHERE user_name = #{userName}
+    </select>
+
+    <!--
+    当用户在个人信息页面,修改头像或者昵称时,会执行该SQL
+    当在后台管理页面中,修改用户的是否为管理员,也会执行SQL
+    -->
+    <update id="update">
+        UPDATE t_user
+        <set>
+            <if test="nickName!=null">nick_name = #{nickName},</if>
+            <if test="imgUrl!=null">img_url = #{imgUrl},</if>
+            <if test="isAdmin!=null">is_admin = #{isAdmin},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!--
+    由于该SQL只是查询用户是否有头像,所以就返回一个字段,那此时,
+    resultType直接指定类型即可
+    -->
+    <select id="selectImgUrlById" resultType="string">
+        SELECT img_url
+        FROM t_user
+        WHERE id = #{id}
+    </select>
+
+    <!--
+    管理员页面的用户列表,不需要显示密码,所以不查询密码
+    展示用户信息时,根据用户创建时间,从近到远排序
+    -->
+    <select id="select" resultType="com.example.traveling.pojo.vo.UserAdminVO">
+        SELECT id, user_name, nick_name, is_admin, create_time, img_url
+        FROM t_user
+        ORDER BY create_time DESC
+    </select>
+
+    <delete id="deleteById">
+        DELETE
+        FROM t_user
+        WHERE id = #{id}
+    </delete>
+</mapper>

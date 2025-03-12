@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.traveling.mapper.ContentMapper">
+    <!--提取公共的部分代码-->
+    <sql id="s1">
+        SELECT c.id, c.title, c.img_url, u.img_url userImgUrl, u.nick_name, cat.name categoryName
+        FROM t_content c
+                 INNER JOIN t_user u ON c.create_by = u.id
+                 INNER JOIN t_category cat ON c.category_id = cat.id
+    </sql>
+    <!--
+    view_count, comment_count 是浏览量和评论量,新增的稿件一定是0
+    update_by, update_time 不需要录入,因为新增不是修改
+    brief的值不需要我们处理,前端页面会自动截取正文content的前50个字
+    -->
+    <insert id="insert">
+        INSERT INTO t_content (title, img_url, video_url, content, type, view_count, comment_count, create_by,
+                               create_time, brief, category_id)
+        VALUES (#{title}, #{imgUrl}, #{videoUrl}, #{content}, #{type}, 0, 0, #{createBy}, #{createTime}, #{brief},
+                #{categoryId})
+    </insert>
+
+    <!--
+    需要两表联查,在查询稿件信息时,还查询出对应的二级类别名称,
+    关联条件就是t_content表的category_id字段和t_category表的id字段相同,
+    并且由于ContentManagementVO实体类中声明了二级分类名称的属性categoryName,
+    所以SQL中cat.name 必须起别名为categoryName,否则MyBatis自动注入不进去,
+    并且此处的SQL是当前用户查询自己的类别稿件,所以需要根据create_by字段约束
+    -->
+    <select id="selectByType" resultType="com.example.traveling.pojo.vo.ContentManagementVO">
+        SELECT con.id,
+               con.title,
+               con.img_url,
+               con.type,
+               con.view_count,
+               con.comment_count,
+               con.brief,
+               con.create_time,
+               cat.name categoryName
+        FROM t_content con
+                 INNER JOIN t_category cat
+                            ON con.category_id = cat.id
+        WHERE con.type = #{type}
+          AND con.create_by = #{id}
+    </select>
+
+    <!--
+    编辑稿件时,回显需要编辑的稿件内容
+    -->
+    <select id="selectByIdForUpdate" resultType="com.example.traveling.pojo.vo.ContentUpdateVO">
+        SELECT id,
+               title,
+               img_url,
+               video_url,
+               content,
+               type,
+               category_id,
+               create_by
+        FROM t_content
+        WHERE id = #{id}
+    </select>
+
+    <!--
+    由于这是个二次编辑稿件,所以需要记录修改的时间以及修改用户
+    -->
+    <update id="update">
+        UPDATE t_content
+        <set>
+            <if test="title!=null">title = #{title},</if>
+            <if test="imgUrl!=null">img_url = #{imgUrl},</if>
+            <if test="brief!=null">brief = #{brief},</if>
+            <if test="videoUrl!=null">video_url = #{videoUrl},</if>
+            <if test="type!=null">type = #{type},</if>
+            <if test="categoryId!=null">category_id = #{categoryId},</if>
+            <if test="updateBy!=null">update_by = #{updateBy},</if>
+            <if test="updateTime!=null">update_time = #{updateTime},</if>
+            <if test="content!=null">content = #{content}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!--<delete id="deleteById">
+        DELETE
+        FROM t_content
+        WHERE id = #{id}
+    </delete>-->
+    <delete id="deleteById">
+        DELETE cn, cm
+        FROM t_comment cm
+                 JOIN t_content cn ON cn.id = cm.content_id
+        WHERE cn.id = #{id}
+    </delete>
+
+    <!--
+    我们需要通过该SQL查询到 稿件id、稿件封面、稿件标题、头像、作者昵称和二级分类名
+    通过t_content表能直接获取稿件id、稿件封面和稿件标题
+    需要关联t_user表,获取头像和作者昵称,关联条件是 t_content表的create_by字段和t_user表的id
+    需要关联t_category表,获取二级分类名,关联条件是 t_content表的category_id字段和t_category表的id
+    并且由于映射的实体类属性名为categoryName,所以SQL中cat.name 必须起别名为categoryName,
+    否则MyBatis自动注入不进去
+    由于前端点击首页的全部是查询全部一级分类的稿件信息,而点击二级分类时,则会查询二级分类的信息,
+    所以我们当前SQL语句需要动态SQL优化一下,有如下的约定
+    前端如果查询所有的一级分类信息,则传递的categoryId是0
+    如果查询的是对应的二级分类信息,则传递的categoryId是对应的二级分类的id值
+    并且首页默认查询的是根据创建时间排序的前四条稿件
+    -->
+    <select id="selectByTypeAndCategoryId" resultType="com.example.traveling.pojo.vo.ContentIndexVO">
+        <include refid="s1"></include>
+        WHERE c.type = #{type}
+        <if test="categoryId != 0">AND c.category_id = #{categoryId}</if>
+        ORDER BY c.create_time DESC LIMIT 0,4
+    </select>
+
+    <!--
+    我们需要查询的内容: 稿件id、稿件标题、摘要、视频路径、正文内容、一级分类、访问量、评论量、创建时间、昵称、作者头像和用户id
+    查询t_content可以直接获取 稿件id、稿件标题、摘要、视频路径、正文内容、一级分类、访问量、评论量和创建时间
+    关联t_user表中可以获取 昵称、作者头像和用户id
+    并且ContentDetailVO声明的userImgUrl和userId要映射SQL中的u.img_url和u.id字段,
+    所以这两个字段要起别名,否则自动映射会失败
+    -->
+    <select id="selectByIdForDetail" resultType="com.example.traveling.pojo.vo.ContentDetailVO">
+        SELECT c.id,
+               c.title,
+               c.video_url,
+               c.content,
+               c.type,
+               c.view_count,
+               c.comment_count,
+               c.create_time,
+               c.brief,
+               u.nick_name,
+               u.img_url userImgUrl,
+               u.id      userId
+        FROM t_content c
+                 INNER JOIN t_user u ON c.create_by = u.id
+        WHERE c.id = #{id}
+    </select>
+
+    <!--
+    修改稿件记录的view_count在原有基础上自增1
+    -->
+    <update id="updateViewCountById">
+        UPDATE t_content
+        SET view_count = view_count + 1
+        WHERE id = #{id}
+    </update>
+
+    <!--
+    占位符的名字最好使用userId,因为我们的接口指定的参数名是userId
+    查询作者的其他文章,所以不应该包含当前文章,故条件中应该将当前文章筛出
+    -->
+    <select id="selectByUserId" resultType="com.example.traveling.pojo.vo.ContentSimpleVO">
+        SELECT id, title, img_url, create_time
+        FROM t_content
+        WHERE create_by = #{userId}
+          AND id != #{contentId}
+        ORDER BY create_time DESC
+        LIMIT 0,4
+    </select>
+
+    <!--
+    查询热门稿件
+    -->
+    <select id="selectHot" resultType="com.example.traveling.pojo.vo.ContentSimpleVO">
+        SELECT id, title, img_url, create_time
+        FROM t_content
+        ORDER BY view_count DESC
+        LIMIT 0,4
+    </select>
+
+    <!--
+    由于该功能查询的内容和selectByTypeAndCategoryId的内容几乎一致,所以功能相似
+    include标签,使用指定的SQL片段
+    -->
+    <select id="selectListByType" resultType="com.example.traveling.pojo.vo.ContentIndexVO">
+        <include refid="s1"></include>
+        WHERE c.type = #{type}
+        ORDER BY c.create_time DESC
+    </select>
+    <!--
+    根据关键字搜索稿件,主要是使用模糊查询
+    模糊查询主要是和LIKE关键字以及通配符 % 和 _ 有关
+    % 匹配0到多个任意字符
+    _ 匹配1个任意字符
+    #占位符会自动为传入的参数添加一对单引号'',所以我们如果想给传入的参数添加''的话,就不能直接拼接
+    $占位符不会给传入的参数添加单引号'',但是这个占位符不会使用,因为不能防止SQL注入攻击
+    CONCAT('%',#{wd},'%') 会进行字符串的拼接 '%#{wd}%'
+    -->
+    <select id="selectByWd" resultType="com.example.traveling.pojo.vo.ContentIndexVO">
+        <include refid="s1"></include>
+        WHERE c.title LIKE CONCAT('%',#{wd},'%')
+        ORDER BY c.create_time DESC
+    </select>
+
+    <!--
+    我们需要查询稿件id、稿件标题、稿件封面、摘要、访问量、评论量、二级分类名和创建时间
+    我们查询t_content表获取稿件id、稿件标题、稿件封面、摘要、访问量、评论量和创建时间
+    关联t_category表,获取二级分类名,关联t_content的category_id字段和t_category的id字段相等
+    可以获取二级分类名
+    -->
+    <select id="selectByTypeForAdmin" resultType="com.example.traveling.pojo.vo.ContentAdminVO">
+        SELECT c.id,
+               c.title,
+               c.img_url,
+               c.view_count,
+               c.comment_count,
+               c.create_time,
+               c.brief,
+               cat.name categoryName
+        FROM t_content c
+                 INNER JOIN t_category cat ON c.category_id = cat.id
+        WHERE c.type = #{type}
+    </select>
+
+    <!--
+    占位符的名字,和接口的形参名要保持一致
+    -->
+    <update id="updateCommentCountById">
+        UPDATE t_content
+        SET comment_count = comment_count + 1
+        WHERE id = #{contentId}
+    </update>
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.traveling.mapper.BannerMapper">
+    <select id="select" resultType="com.example.traveling.pojo.vo.BannerVO">
+        SELECT id, img_url
+        FROM t_banner
+        ORDER BY sort
+    </select>
+
+    <select id="selectForAdmin" resultType="com.example.traveling.pojo.vo.BannerAdminVO">
+        SELECT id, img_url, create_time
+        FROM t_banner
+        ORDER BY sort
+    </select>
+
+    <delete id="deleteById">
+        DELETE
+        FROM t_banner
+        WHERE id = #{id}
+    </delete>
+
+    <insert id="insert">
+        INSERT INTO t_banner (img_url, sort, create_time)
+        VALUES (#{imgUrl}, #{sort}, #{createTime})
+    </insert>
+
+    <select id="getMaxSort" resultType="int">
+        SELECT MAX(sort) FROM t_banner
+    </select>
+</mapper>

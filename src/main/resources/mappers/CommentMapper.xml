@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.traveling.mapper.CommentMapper">
+    <insert id="insert">
+        INSERT INTO t_comment(content, user_id, content_id, create_time)
+        VALUES (#{content}, #{userId}, #{contentId}, #{createTime})
+    </insert>
+
+    <!--
+    我们需要获取评论编号、评论内容、评论者昵称、评论者头像和评论时间
+    查询t_comment这张表可以获取 评论编号、评论内容和评论时间
+    关联t_user表获取 评论者昵称和评论者头像,关联条件式t_comment表的user_id字段和t_user表的id字段相等
+    由于CommentVO中的nickName和userImgUrl属性需要和查询的u.nick_name和u.img_url映射
+    所以img_url需要起别名,但是nick_name是不需要的,因为属性名符合驼峰,所以可以自动映射
+    -->
+    <select id="selectByContentId" resultType="com.example.traveling.pojo.vo.CommentVO">
+        SELECT c.id,
+               c.content,
+               c.create_time,
+               u.nick_name,
+               u.img_url userImgUrl
+        FROM t_comment c
+                 INNER JOIN t_user u ON c.user_id = u.id
+        WHERE c.content_id = #{contentId}
+        ORDER BY c.create_time DESC
+    </select>
+</mapper>

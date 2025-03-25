@@ -53,7 +53,7 @@
             <!--食谱开始-->
                 <el-row style="background-color: white">
                     <el-col span="3">
-                        <p style="font-size: 28px;margin: 15px">OvO--1</p>
+                        <p style="font-size: 28px;margin: 15px">景点推荐</p>
                     </el-col>
                     <el-col span="21">
                         <el-menu @select="recipeSelect" mode="horizontal" default-active="0"
@@ -85,13 +85,13 @@
                     </el-col>
                 </el-row>
                 <div style="text-align: center;margin-bottom: 20px">
-                    <el-button @click="location.href='/contentList.html?type=1'">点击查看更多sp</el-button>
+                    <el-button @click="location.href='/contentList.html?type=1'">点击查看更多景点</el-button>
                 </div>
             <!--食谱结束-->
             <!--视频开始-->
             <el-row style="background-color: white">
                 <el-col span="3">
-                    <p style="font-size: 28px;margin: 15px">景点视频</p>
+                    <p style="font-size: 28px;margin: 15px">美食推荐</p>
                 </el-col>
                 <el-col span="21">
                     <el-menu @select="videoSelect" mode="horizontal" default-active="0"
@@ -122,13 +122,13 @@
                 </el-col>
             </el-row>
             <div style="text-align: center;margin-bottom: 20px">
-                <el-button @click="location.href='/contentList.html?type=2'">点击查看更多视频</el-button>
+                <el-button @click="location.href='/contentList.html?type=2'">点击查看更多美食</el-button>
             </div>
             <!--视频结束-->
             <!--资讯开始-->
             <el-row style="background-color: white">
                 <el-col span="3">
-                    <p style="font-size: 28px;margin: 15px">行业资讯</p>
+                    <p style="font-size: 28px;margin: 15px">游记大全</p>
                 </el-col>
                 <el-col span="21">
                     <el-menu @select="infoSelect" mode="horizontal" default-active="0"
@@ -160,7 +160,7 @@
                 </el-col>
             </el-row>
             <div style="text-align: center;margin-bottom: 20px">
-                <el-button @click="location.href='/contentList.html?type=3'">点击查看更多资讯</el-button>
+                <el-button @click="location.href='/contentList.html?type=3'">点击查看更多游记</el-button>
             </div>
             <!--资讯结束-->
         </el-main>

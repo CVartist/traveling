@@ -58,10 +58,10 @@ Vue.component('my-header', {
                     <el-col span="10">
                         <el-menu :default-active="currentIndex" @select="handleSelect" mode="horizontal" active-text-color="orange">
                             <el-menu-item index="0">首页</el-menu-item>
-                            <el-menu-item index="1">OvO--1</el-menu-item>
-                            <el-menu-item index="2">OvO--2</el-menu-item>
-                            <el-menu-item index="3">OvO--3</el-menu-item>
-                            <el-menu-item index="4">BiGDataView</el-menu-item>
+                            <el-menu-item index="1">景点推荐</el-menu-item>
+                            <el-menu-item index="2">美食推荐</el-menu-item>
+                            <el-menu-item index="3">游记大全</el-menu-item>
+                            <el-menu-item index="4">数据大屏</el-menu-item>
                         </el-menu>
                     </el-col>
                     <el-col span="6">

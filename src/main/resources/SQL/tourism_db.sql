@@ -203,7 +203,7 @@ select poiname, coverimageurl, null, title, 1, null, cast(commentcount as unsign
 
 select * from t_content where type = 1;
 
-
+# lxj
 
 UPDATE t_content
 SET category_id = CASE

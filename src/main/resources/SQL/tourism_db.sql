@@ -203,6 +203,8 @@ select poiname, coverimageurl, null, title, 1, null, cast(commentcount as unsign
 
 select * from t_content where type = 1;
 
+
+
 UPDATE t_content
 SET category_id = CASE
                       WHEN price_type = '4' AND type = 1 THEN 2

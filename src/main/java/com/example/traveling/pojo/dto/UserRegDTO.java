@@ -8,7 +8,7 @@ public class UserRegDTO {
     /**
      * 用户名
      */
-    @ApiModelProperty(value = "用户名", required = true, example = "柯基")
+    @ApiModelProperty(value = "用户名", required = true, example = "cvArtist")
     private String userName;
     /**
      * 密码

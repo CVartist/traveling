@@ -176,8 +176,8 @@
     -->
     <select id="selectListByType" resultType="com.example.traveling.pojo.vo.ContentIndexVO">
         <include refid="s1"></include>
-        WHERE c.type = #{type}
-        ORDER BY c.create_time DESC
+        WHERE c.type = #{type} AND c.img_url != '/imgs/icon.png'
+        ORDER BY c.view_count DESC
     </select>
     <!--
     根据关键字搜索稿件,主要是使用模糊查询

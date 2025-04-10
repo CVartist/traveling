@@ -199,7 +199,14 @@ insert into t_content(title, img_url, video_url, content, type, view_count, comm
 select poiname, coverimageurl, null, title, 1, null, cast(commentcount as unsigned ), null,
        1, STR_TO_DATE('2025-01-01', '%Y-%m-%d %H:%i:%s'), 1, STR_TO_DATE('2025-01-01', '%Y-%m-%d %H:%i:%s'),
        sightcategoryinfo, 1 , null, place, address, commentscore, sightlevelstr, pricetype, marketprice,
-       marketdiscountprice, pricetype, openstatusclose, openstatus from poi_data;
+       marketdiscountprice, price, openstatusclose, openstatus from poi_data;
+
+
+UPDATE t_content AS c
+    JOIN poi_data AS u ON c.title = u.poiname
+SET
+    c.price = u.price
+where type = 1;
 
 select * from t_content where type = 1;
 
@@ -211,3 +218,123 @@ SET category_id = CASE
                       WHEN price_type = '2' AND type = 1 THEN 3
                       WHEN type = 1 THEN 4
     END where type = 1;
+
+
+SELECT create_by, COUNT(*) AS post_count
+FROM t_content
+GROUP BY create_by
+ORDER BY post_count DESC;
+
+90,268
+11,208
+
+select * from t_content where type = 1  order by comment_count desc limit 10;
+793
+1253
+
+
+
+SELECT create_by, COUNT(*) AS post_count, SUM(CAST(view_count AS UNSIGNED)) AS total_views, SUM(CAST(comment_count AS UNSIGNED)) AS total_comments, SUM(CAST(like_count AS UNSIGNED)) AS total_likes
+FROM t_content group by create_by order by total_likes desc;
+
+select * from t_user where id in ('793','1096');
+
+-- radar.json
+SELECT u.user_name,
+       COUNT(*) AS post_count,
+       SUM(CAST(c.view_count AS UNSIGNED)) AS total_views,
+       SUM(CAST(c.comment_count AS UNSIGNED)) AS total_comments,
+       SUM(CAST(c.like_count AS UNSIGNED)) AS total_likes
+FROM t_content c
+         JOIN t_user u ON c.create_by = u.id
+GROUP BY u.user_name
+ORDER BY total_likes DESC;
+
+-- rank.json
+select title,comment_score from t_content where type = 1  order by comment_count desc limit 10;
+
+-- hotScore
+SELECT * FROM (
+                  (
+                      SELECT title, comment_score, '免费' AS type
+                      FROM t_content
+                      WHERE type = 1 and price_type = 4
+                      ORDER BY comment_count DESC
+                      LIMIT 20
+                  )
+
+                  UNION ALL
+
+                  (
+                      SELECT title, comment_score, '优惠' AS type
+                      FROM t_content
+                      WHERE type = 1 and price_type = 2
+                      ORDER BY comment_count DESC
+                      LIMIT 20
+                  )
+
+                  UNION ALL
+
+                  (
+                      SELECT title, comment_score, '原价' AS type
+                      FROM t_content
+                      WHERE type = 1 and price_type = 3
+                      ORDER BY comment_count DESC
+                      LIMIT 20
+                  )
+              ) AS combined
+ORDER BY type DESC
+LIMIT 60;
+
+-- rankPrice.json
+SELECT title, discount
+FROM t_content where type = 1 and price_type = 2
+ORDER BY CAST(REPLACE(discount, '￥', '') AS DECIMAL(10, 2)) DESC limit 10;
+
+-- map.json
+select * from  t_content where type = 1 and place like '%武汉%' order by comment_count desc;
+select * from  t_content where type = 1 and place like '%吉林%' order by comment_count desc;
+select * from  t_content where type = 1 and place like '%厦门%' order by comment_count desc;
+select * from  t_content where type = 1 and place like '%重庆%' order by comment_count desc;
+select * from  t_content where type = 1 and place like '%北京%' order by comment_count desc;
+select * from  t_content where type = 1 and place like '%成都%' order by comment_count desc;
+select * from  t_content where type = 1 and t_content.address like '%山东%' order by comment_count desc;
+select * from  t_content where type = 1 and t_content.address like '%上海%' order by comment_count desc;
+select * from  t_content where type = 1 and t_content.address like '%云南%' order by comment_count desc;
+select * from  t_content where type = 1 and t_content.address like '%天津%' order by comment_count desc;
+
+--
+select * from  t_content where type = 3 and content like '%时间：1 月%';
+select * from  t_content where type = 3 and content like '%天数：5555 天%';
+
+-- tripMonth.json
+SELECT
+    SUBSTRING_INDEX(SUBSTRING_INDEX(content, '时间：', -1), '月', 1) AS month,
+#     SUM(CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(content, '人均：', -1), '元', 1) AS DECIMAL)) AS total_amount,
+    COUNT(*) AS trip_count
+FROM
+    t_content where type = 3 and content like '%时间%'
+GROUP BY
+    month
+ORDER BY
+    month;
+
+-- tripDay.json
+SELECT
+    SUBSTRING_INDEX(SUBSTRING_INDEX(content, '天数：', -1), '天', 1) AS day,
+    COUNT(*) AS trip_count
+FROM
+    t_content where type = 3 and content like '%天数%'
+GROUP BY
+    day
+ORDER BY
+    day;
+
+-- efsc.json
+select title, price,comment_count,comment_score from  t_content where type = 2 order by CAST(REPLACE(price, '￥', '') AS DECIMAL(10, 2)) DESC  ;
+
+select title, price,comment_count,comment_score from  t_content where type = 2 order by CAST(REPLACE(price, '￥', '') AS DECIMAL(10, 2)) DESC  ;
+select title, price,comment_count,comment_score from  t_content where type = 1 order by CAST(REPLACE(price, '￥', '') AS DECIMAL(10, 2)) DESC  ;
+
+
+select title,comment_score from t_content where type = 1;

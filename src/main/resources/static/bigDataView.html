@@ -1,317 +1,1138 @@
 <!DOCTYPE html>
-<html lang="en" style="font-size: 97.5px;">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html>
 
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>travelingView</title>
-    <link rel="stylesheet" href="./css/common.css">
-    <link rel="stylesheet" href="./css/style.css">
-    <style id="ai-assist-right-style">
-        html.ai-assist-html {
-            width: calc(100% - 480px)!important;
-            position: relative!important;
-            min-height: 100vh!important
-        }
-        .ai-assist-highlight {
-            background: yellow;
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/styleBigData.css">
+    <title>Traveling</title>
+    <script src="js/jqueryBigData.min.js"></script>
+    <script src="js/echartsBigData.min.js"></script>
+    <script src="js/dark.js"></script>
+    <script src="js/date.js"></script>
+    <script src="js/map_utils.js"></script>
+
+    <style type="text/css">
+        .chart::after {
+            /* content: "图表"; */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -1rem;
+            margin-left: -1rem;
+            opacity: 0.8;
         }
     </style>
 </head>
-<body>
+<body class="fill-parent" dg-chart-options="{title:{show:false},legend:{top:0},grid:{top:25}}"
+      dg-chart-auto-resize="true"
+      dg-chart-theme="{color:'#F0F0F0',backgroundColor:'transparent',actualBackgroundColor:'#141c47'}">
+<div class="head">
+    <div class="title">
+        <a href="http://localhost:8080/">
+            <div class="title-left"></div>
+            <div class="title-value">TravelingView</div>
+            <div class="title-right"></div>
+        </a>
 
-<div class="main_box">
-    <a href="/">
-    <div class="header">
-        <div class="left">
-            <div class="date">2024-05-21 09:59:20</div>
-            <div class="week">星期五</div>
-        </div>
-        <div class="center">travelingView</div>
-        <div class="right">
-           <p>travelingView</p>
-        </div>
     </div>
-    </a>
-    <div class="content">
-        <div class="left">
-            <div class="inner_left">
-                <div class="item weather">
-                    <div class="head_block">
-                        <p class="level">气象环境：<span class="air_level"></span>
-                        </p>
-                        <p class="time">
-                            <span class="updata_time"></span>更新
-                            <a href="/"><img class="refresh" src="./imgs/refresh.png" alt=""></a>
-                        </p>
-                    </div>
-                    <div class="middle_block">
-                        <div class="tem_wrap">
-                            <span class="tem">22</span>
-                            <sup>°</sup>
-                            <sub class="wea">晴朗</sub>
-                        </div>
-                        <div class="win_wrap">风向<span class="win">东</span>
-                        </div>
-                        <div class="meter">风速 <span class="win_meter">20</span>
-                        </div>
-                    </div>
-                    <div class="foot_block">
-                        <div class="foot_item">
-                            <p class="title">湿度</p>
-                            <p class="humidity">适宜</p>
-                            <p>湿润</p>
-                        </div>
-                        <div class="foot_item">
-                            <p class="title">PM2.5</p>
-                            <p class="air_pm25">80</p>
-                            <p class="air_level">20</p>
-                        </div>
-                        <div class="foot_item">
-                            <p class="title">负氧离子</p>
-                            <p>3109/cm<sup>3</sup>
-                            </p>
-                            <p>1级</p>
-                        </div>
-                        <div class="foot_item">
-                            <p class="title">噪声</p>
-                            <p>56.6dB</p>
-                            <p>较安静</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="item tourists_flow chartWrap">
-                    <div class="module_title">实时游客流量<span>单位：人</span>
-                    </div>
-                    <div class="inner_wrap chart_wrap" id="touristsFlowChart" _echarts_instance_="ec_1718934889437" style="-webkit-tap-highlight-color: transparent; user-select: none; position: relative;">
-                        <div style="position: relative; width: 397px; height: 162px; padding: 0px; margin: 0px; border-width: 0px;">
-                            <canvas data-zr-dom-id="zr_0" width="397" height="162" style="position: absolute; left: 0px; top: 0px; width: 397px; height: 162px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas>
-                        </div>
-                        <div class=""></div>
-                    </div>
-                </div>
-                <div class="item car_flow chartWrap">
-                    <div class="module_title">实时车流量</div>
-                    <div class="inner_wrap chart_wrap" id="carFlowChart" _echarts_instance_="ec_1718934889439" style="-webkit-tap-highlight-color: transparent; user-select: none; position: relative;">
-                        <div style="position: relative; width: 397px; height: 162px; padding: 0px; margin: 0px; border-width: 0px;">
-                            <canvas data-zr-dom-id="zr_0" width="397" height="162" style="position: absolute; left: 0px; top: 0px; width: 397px; height: 162px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas>
-                        </div>
-                        <div class=""></div>
-                    </div>
-                </div>
-            </div>
-            <div class="inner_right">
-                <div class="item satisfaction">
-                    <div class="module_title">游客满意度</div>
-                    <div class="inner_wrap">
-                    </div>
-                </div>
-                <div class="item chartWrap totalPeopleNum">
-                    <div class="module_title">实时游客流量<span class="num">28567人</span>
-                    </div>
-                    <div class="inner_wrap chart_wrap" id="totalPeopleChart" _echarts_instance_="ec_1718934889438" style="-webkit-tap-highlight-color: transparent; user-select: none;">
-                        <div style="position: relative; width: 257px; height: 162px; padding: 0px; margin: 0px; border-width: 0px;">
-                            <canvas data-zr-dom-id="zr_0" width="257" height="162" style="position: absolute; left: 0px; top: 0px; width: 257px; height: 162px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="item totalCarFlow">
-                    <div class="module_title">今日累计车流量</div>
-                    <div class="inner_wrap chart_wrap" id="totalCarFlow">
-                        <div class="car_item">
-                            <img src="./imgs/car.png" alt="">
-                            <p>今日到访</p>
-                            <p class="visiting num">333</p>
-                        </div>
-                        <div class="car_item back_wrap">
-                            <img src="./imgs/car1.png" alt="">
-                            <p>今日返程</p>
-                            <p class="back num">303</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="center">
-            <div class="item chartWrap">
-                <div class="module_title">旅游景区</div>
-                <div class="chart_wrap map_wrap" style="position: relative;">
-                    <div class="map_box">
-                        <img id="map" src="./imgs/map.jpg" alt="">
-                        <div class="city city1 red">
-                            <div class="dotted">858</div>
-                            <div class="pulse1"></div>
-                            <div class="pulse2"></div>
-                            <div class="pulse3"></div>
-                        </div>
-                        <div class="city city2 orange">
-                            <div class="dotted">425</div>
-                            <div class="pulse1"></div>
-                            <div class="pulse2"></div>
-                            <div class="pulse3"></div>
-                        </div>
-                        <div class="city city3">
-                            <div class="dotted">362</div>
-                            <div class="pulse1"></div>
-                            <div class="pulse2"></div>
-                            <div class="pulse3"></div>
-                        </div>
-                        <div class="city city4 orange">
-                            <div class="dotted">245</div>
-                            <div class="pulse1"></div>
-                            <div class="pulse2"></div>
-                            <div class="pulse3"></div>
-                        </div>
-                        <div class="city city5">
-                            <div class="dotted">88</div>
-                            <div class="pulse1">10</div>
-                            <div class="pulse2"></div>
-                            <div class="pulse3"></div>
-                        </div>
-                    </div>
-                    <div class="legend">
-                        拥挤程度
-                        <p class="colorBar"></p>
-                        <p class="text">
-                            <span>空闲</span>
-                            <span>拥挤</span>
-                            <span>爆满</span>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="right">
-            <div class="item chartWrap">
-                <div class="module_title">停车场数据</div>
-                <div class="inner_wrap chart_wrap" id="carSpaceNum" _echarts_instance_="ec_1718934889440" style="-webkit-tap-highlight-color: transparent; user-select: none; position: relative;">
-                    <div style="position: relative; width: 345px; height: 267px; padding: 0px; margin: 0px; border-width: 0px;">
-                        <canvas data-zr-dom-id="zr_0" width="345" height="267" style="position: absolute; left: 0px; top: 0px; width: 345px; height: 267px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas>
-                    </div>
-                    <div class=""></div>
-                </div>
-            </div>
-            <div class="item chartWrap">
-                <div class="module_title">游客消费占比</div>
-                <div class="inner_wrap chart_wrap" id="consumptionChart" _echarts_instance_="ec_1718934889441" style="-webkit-tap-highlight-color: transparent; user-select: none; position: relative;">
-                    <div style="position: relative; width: 345px; height: 267px; padding: 0px; margin: 0px; border-width: 0px;">
-                        <canvas data-zr-dom-id="zr_0" width="345" height="267" style="position: absolute; left: 0px; top: 0px; width: 345px; height: 267px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas>
-                    </div>
-                    <div class=""></div>
-                </div>
+</div>
+<div class="content">
+    <div class="layout layout-left-top">
+        <div class="panel border-all title-bg">
+            <div class="title">游记大牛</div>
+            <!--根据其发布文章点赞总数筛选前两个-->
+            <div class="chart" dg-chart-widget="" id="radar">
+                <script>
+                    var radarEcharts = echarts.init(document.getElementById("radar"));
+                    var allData = [];
+
+                    $.ajax({
+                        type: "GET",
+                        url: "/radardata",
+                        dataType: "json",
+                        success: function (data) {
+                            console.log(data);
+                            allData = data;
+                            console.log(allData.length);
+                            showRadarData(allData);
+                        }
+                    });
+
+                    function showRadarData(allData) {
+                        var author = [];
+                        var numData = [];
+
+                        for (var i = 0; i < allData.length; i++) {
+                            author.push(allData[i].作者);
+                            numData.push([
+                                allData[i].文章数量,
+                                allData[i].浏览量,
+                                allData[i].评论数量,
+                                allData[i].点赞量
+                            ]);
+                        }
+
+                        console.log(author);
+                        console.log(numData);
+
+                        const option = {
+                            tooltip: {
+                                trigger: 'axis',
+                                textStyle: {
+                                    color: '#ffffff' // 修改工具提示文字颜色
+                                }
+                            },
+                            legend: {
+                                left: 'center',
+                                data: author,
+                                textStyle: {
+                                    color: '#bad0cf' // 修改图例文字颜色
+                                }
+                            },
+                            radar: [
+                                {
+                                    indicator: [
+                                        {text: '文章数量', max: 40},
+                                        {text: '浏览量', max: 100000},
+                                        {text: '评论数量', max: 10},
+                                        {text: '点赞量', max: 120}
+                                    ],
+                                    center: ['50%', '58%'],
+                                    radius: 40,
+                                    name: {
+                                        textStyle: {
+                                            color: '#1dce11' // 修改雷达图指示器文字颜色
+                                        }
+                                    }
+                                }
+                            ],
+                            series: numData.map((values, index) => ({
+                                type: 'radar',
+                                tooltip: {
+                                    trigger: 'item'
+                                },
+                                areaStyle: {},
+                                data: [{
+                                    value: values,
+                                    name: author[index]
+                                }]
+                            }))
+                        };
+
+                        radarEcharts.setOption(option);
+                    }
+                </script>
             </div>
         </div>
     </div>
-    <div class="footer">
-        <div class="left">
-            <div class="item chartWrap">
-                <div class="module_title">景区门票销量</div>
-                <div class="inner_wrap chart_wrap" id="ticketsChart" _echarts_instance_="ec_1718934889442" style="-webkit-tap-highlight-color: transparent; user-select: none; position: relative;">
-                    <div style="position: relative; width: 624px; height: 166px; padding: 0px; margin: 0px; border-width: 0px; cursor: default;">
-                        <canvas data-zr-dom-id="zr_0" width="624" height="166" style="position: absolute; left: 0px; top: 0px; width: 624px; height: 166px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas>
-                        <div style="position: absolute !important; visibility: hidden !important; padding: 0px !important; margin: 0px !important; border-width: 0px !important; user-select: none !important; width: 0px !important; height: 0px !important; inset: 0px auto auto 0px !important;"></div>
-                        <div style="position: absolute !important; visibility: hidden !important; padding: 0px !important; margin: 0px !important; border-width: 0px !important; user-select: none !important; width: 0px !important; height: 0px !important; inset: 0px 0px auto auto !important;"></div>
-                        <div style="position: absolute !important; visibility: hidden !important; padding: 0px !important; margin: 0px !important; border-width: 0px !important; user-select: none !important; width: 0px !important; height: 0px !important; inset: auto auto 0px 0px !important;"></div>
-                        <div style="position: absolute !important; visibility: hidden !important; padding: 0px !important; margin: 0px !important; border-width: 0px !important; user-select: none !important; width: 0px !important; height: 0px !important; inset: auto 0px 0px auto !important;"></div>
-                    </div>
-                    <div class="" style="position: absolute; display: block; border-style: solid; white-space: nowrap; z-index: 9999999; box-shadow: rgba(0, 0, 0, 0.2) 1px 2px 10px; background-color: rgb(255, 255, 255); border-width: 1px; border-radius: 4px; color: rgb(102, 102, 102); font: 14px / 21px &quot;Microsoft YaHei&quot;; padding: 10px; left: 380px; top: 23px; border-color: rgb(111, 125, 227); pointer-events: none; visibility: hidden; opacity: 0;">
-                        <div style="margin: 0px 0 0;line-height:1;">
-                            <div style="font-size:14px;color:#666;font-weight:400;line-height:1;">销售额</div>
-                            <div style="margin: 10px 0 0;line-height:1;">
-                                <div style="margin: 0px 0 0;line-height:1;">
-                                    <span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:#6f7de3;"></span>
-                                    <span style="font-size:14px;color:#666;font-weight:400;margin-left:2px">15时</span>
-                                    <span style="float:right;margin-left:20px;font-size:14px;color:#666;font-weight:900">719</span>
-                                    <div style="clear:both"></div>
-                                </div>
-                                <div style="clear:both"></div>
-                            </div>
-                            <div style="clear:both"></div>
-                        </div>
-                    </div>
-                </div>
+    <div class="layout layout-left-center1">
+        <div class="panel border-all title-bg">
+            <div class="title">评论数量前十的景点评分</div>
+            <!--根据其发布文章点赞总数筛选前十-->
+            <div class="chart" dg-chart-widget="" id="rank">
+                <script>
+                    var rank1Echarts = echarts.init(document.getElementById("rank"))
+                    var allData = []
+                    $.ajax({
+                        type: "GET",
+                        url: "/rankdata",
+                        //返回的数据jQuery自动转换JSON对象
+                        dataType: "json",
+                        success: function (data) {
+                            console.log(data)
+                            allData = data
+                            console.log(allData)
+                            showPieData(allData)
+
+                        }
+                    })
+
+                    function showPieData(allData) {
+                        const options = {
+                            tooltip: {
+                                trigger: 'item',
+                                textStyle: {
+                                    color: '#ffffff'
+                                }
+                            },
+                            legend: {
+                                top: '0%',
+                                left: 'center',
+                                textStyle: {
+                                    color: '#ffffff',
+                                    fontSize :9
+                                }
+                            },
+                            series: [
+                                {
+                                    name: '景点',
+                                    type: 'pie',
+                                    radius: ['30%', '60%'],
+                                    center: ['50%', '60%'],
+                                    avoidLabelOverlap: false,
+                                    itemStyle: {
+                                        borderRadius: 10,
+                                        borderColor: 'red',
+                                        borderWidth: 2
+                                    },
+                                    label: {
+                                        show: false,
+                                        position: 'center',
+                                        textStyle: {
+                                            color: '#ffffff'
+                                        }
+                                    },
+                                    emphasis: {
+                                        label: {
+                                            show: true,
+                                            fontSize: '15',
+                                            fontWeight: 'bold'
+                                        }
+                                    },
+                                    labelLine: {
+                                        show: false
+                                    },
+                                    data: allData
+                                }
+                            ]
+                        };
+                        rank1Echarts.setOption(options)
+                    }
+                </script>
             </div>
         </div>
-        <div class="center">
-            <div class="item tourists chartWrap">
-                <div class="module_title">游客趋势分析 <span>游客人数：人</span>
-                </div>
-                <div class="chart_wrap">
-                    <ul class="table_head">
-                        <li>
-                            <span></span>
-                            <span>斑竹山</span>
-                            <span>孽龙洞景区</span>
-                            <span>泉之源</span>
-                            <span>赤山幕冲生态</span>
-                            <span>杨岐山普通寺</span>
-                        </li>
-                    </ul>
-                    <ul class="table_body">
-                        <li class="tr_item">
-                            <span>昨日</span>
-                            <span>1246</span>
-                            <span>2246</span>
-                            <span>2146</span>
-                            <span>2246</span>
-                            <span>2460</span>
-                        </li>
-                        <li class="tr_item">
-                            <span>今日</span>
-                            <span>246</span>
-                            <span>246</span>
-                            <span>246</span>
-                            <span>246</span>
-                            <span>246</span>
-                        </li>
-                        <li class="tr_item">
-                            <span>最近7日</span>
-                            <span>246</span>
-                            <span>246</span>
-                            <span>246</span>
-                            <span>246</span>
-                            <span>246</span>
-                        </li>
-                        <li class="tr_item">
-                            <span>最近30日</span>
-                            <span>更多模板</span>
-                            <span>关注</span>
-                            <span>公众号</span>
-                            <span>DreamCoders</span>
-                            <span>免费获取</span>
-                        </li>
-                    </ul>
-                </div>
+    </div>
+    <div class="layout layout-left-center2">
+        <div class="panel border-all title-bg">
+            <div class="title">不同收费类型前二十热度景点评分</div>
+            <div class="chart" dg-chart-widget="" id="engli">
+                <script>
+                    var allData = []
+                    var engliEcharts = echarts.init(document.getElementById("engli"))
+                    // $(".btn").on("click", function () {
+                    //     var value = $(this).attr("value")
+                    //     showType = value
+                    //     showengliData(allData)
+                    // })
+                    // window.addEventListener("resize", screenAdapter)
+                    $.ajax({
+                        type: "GET",
+                        url: "/hotScoreData",
+                        dataType: "json",
+                        success: function (data) {
+                            console.log(data)
+                            allData = data
+                            showengliData(allData)
+                        }
+                    })
+
+                    function showengliData(data) {
+
+                        const colorArr1 = [
+                            'rgb(55, 162, 255)',
+                            'rgb(255, 0, 135)',
+                            'rgb(255, 191, 0)'
+                        ]
+                        // 全透明的颜色值
+                        const colorArr2 = [
+                            'rgb(116, 21, 219)',
+                            'rgb(135, 0, 157)',
+                            'rgb(224, 62, 76)'
+                        ]
+                        var valueArr = data.data
+                        var seriesArr = valueArr.map((item, index) => {
+                            return {
+                                type: "line",
+                                name: item.name,
+                                data: item.data,
+                                stack: 'Total',
+                                smooth: true,
+                                showSymbol: false,
+                                lineStyle: {
+                                    width: 0
+                                },
+                                emphasis: {
+                                    focus: 'series'
+                                },
+                                areaStyle: {
+                                    opacity: 0.8,
+                                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                        {
+                                            offset: 0,
+                                            color: colorArr1[index]
+                                        }, // %0的颜色值
+                                        {
+                                            offset: 1,
+                                            color: colorArr2[index]
+                                        } // 100%的颜色值
+                                    ])
+                                }
+                            }
+                        })
+                        var legendArr = valueArr.map(item => {
+                            return item.name
+                        })
+                        const option = {
+                            tooltip: {
+                                trigger: 'axis',
+                                axisPointer: {
+                                    type: 'cross',
+                                    label: {
+                                        backgroundColor: '#6a7985'
+                                    }
+                                }
+                            },
+                            legend: {
+                                data: data.data.name,
+                                textStyle: {
+                                    color: '#ffffff',
+                                    fontSize :12
+                                }
+                            },
+                            toolbox: {
+                                feature: {
+                                    saveAsImage: {}
+                                }
+                            },
+                            grid: {
+                                left: '3%',
+                                right: '4%',
+                                bottom: '3%',
+                                containLabel: true
+                            },
+                            xAxis: [
+                                {
+                                    type: 'category',
+                                    boundaryGap: false,
+                                    data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
+                                }
+                            ],
+                            yAxis: [
+                                {
+                                    type: 'value'
+                                }
+                            ],
+                            series: seriesArr
+                        };
+                        engliEcharts.setOption(option)
+                    }
+                </script>
             </div>
         </div>
-        <div class="right">
-            <div class="item chartWrap">
-                <div class="module_title">12301呼叫</div>
-                <div class="inner_wrap chart_wrap" id="helpCellChart" _echarts_instance_="ec_1718934889443" style="-webkit-tap-highlight-color: transparent; user-select: none; position: relative;">
-                    <div style="position: relative; width: 531px; height: 166px; padding: 0px; margin: 0px; border-width: 0px; cursor: default;">
-                        <canvas data-zr-dom-id="zr_0" width="531" height="166" style="position: absolute; left: 0px; top: 0px; width: 531px; height: 166px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas>
-                        <canvas data-zr-dom-id="zr_1" width="531" height="166" style="position: absolute; left: 0px; top: 0px; width: 531px; height: 166px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas>
-                        <canvas data-zr-dom-id="zr_3" width="531" height="166" style="position: absolute; left: 0px; top: 0px; width: 531px; height: 166px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas>
-                    </div>
-                    <div class=""></div>
-                </div>
+    </div>
+    <div class="layout layout-left-bottom">
+        <div class="panel border-all title-bg">
+            <div class="title">优惠力度最大景点</div>
+            <div class="chart" dg-chart-widget="" id="bing">
+                <script>
+
+                    var bingEcharts = echarts.init(document.getElementById("bing"))
+                    var allData = []
+                    $.ajax({
+                        type: "GET",
+                        url: "/rankPriceData",
+                        //返回的数据jQuery自动转换JSON对象
+                        dataType: "json",
+                        success: function (data) {
+                            console.log(data)
+                            allData = data
+                            console.log(allData)
+                            showBingData(allData)
+
+                        }
+                    })
+
+                    function showBingData(allData) {
+
+                        const option = {
+                            legend: {
+                                top: 'bottom',
+                                textStyle: {
+                                    color: '#ffffff',
+                                    fontSize :9
+                                }
+                            },
+                            toolbox: {
+                                show: true,
+                                feature: {
+                                    mark: {show: true},
+                                    dataView: {show: true, readOnly: false},
+                                    restore: {show: true},
+                                    saveAsImage: {show: true}
+                                }
+                            },
+                            series: [
+                                {
+                                    name: '优惠力度最大景区',
+                                    type: 'pie',
+                                    radius: [20, 40],
+                                    center: ['50%', '35%'],
+                                    roseType: 'area',
+                                    itemStyle: {
+                                        borderRadius: 2
+                                    },
+                                    data: allData
+                                }
+                            ]
+                        };
+                        bingEcharts.setOption(option)
+                    }
+                </script>
             </div>
+            <div class="border-foot"></div>
+        </div>
+    </div>
+    <div class="layout layout-center-top">
+        <div class="panel border-all">
+            <div class="title">最受欢迎景点分布</div>
+            <div class="chart" dg-chart-widget="" id="map">
+                <script>
+                    var mapEcharts = echarts.init(document.getElementById("map"))
+                    province_all_data = {}
+                    $.ajax({
+                        type: "GET",
+                        url: "/chinadata",
+                        //返回的数据jQuery自动转换JSON对象
+                        dataType: "json",
+                        success: function (data) {
+                            echarts.registerMap('china', data)
+                            const initOption = {
+                                geo: {
+                                    type: "map",
+                                    map: "china",
+                                    top: '5%',
+                                    bottom: '5%',
+                                    itemStyle: {
+                                        areaColor: '#bad0cf',
+                                        borderColor: 'red'
+                                    }
+                                    // ,
+                                    // label: {
+                                    //     show: true,
+                                    //     color: '#0c3379' // 修改文字颜色
+                                    // }
+
+                                },
+                                legend: {
+                                    left: '5%',
+                                    bottom: '5%',
+                                    orient: 'vertical',
+                                    textStyle: {
+                                        color: '#a112a6' // 修改图例文字颜色
+                                    }
+                                }
+                            }
+                            mapEcharts.setOption(initOption)
+                            showScatterData()
+                        }
+                    })
+                    $("#map").dblclick(function () {
+                        const revertOption = {
+                            geo: {
+                                map: 'china'
+                            }
+                        }
+                        mapEcharts.setOption(revertOption)
+                    })
+                    mapEcharts.on('click', function (arg) {
+                        province_name = getProvinceMapInfo(arg.name)
+                        if (!province_name) {
+                            return
+                        }
+                        if (!province_all_data[province_name.key]) {
+                            province_all_data[province_name.key] = province_name.path
+                            var url = "/mapprovincedata?name=" + province_name.key
+                            $.ajax({
+                                type: "GET",
+                                url: url,
+                                dataType: "json",
+                                success: function (province_data) {
+                                    echarts.registerMap(province_name.key, province_data)
+                                    const changeOption = {
+                                        geo: {
+                                            map: province_name.key
+                                        }
+                                    }
+                                    mapEcharts.setOption(changeOption)
+                                }
+                            })
+                        } else {
+                            const changeOption = {
+                                geo: {
+                                    map: province_name.key
+                                }
+                            }
+                            mapEcharts.setOption(changeOption)
+                        }
+                    })
+
+                    function showScatterData() {
+                        $.ajax({
+                            type: "GET",
+                            url: "/mapdata",
+                            dataType: "json",
+                            success: function (data) {
+                                console.log(data)
+                                const legendArr = data.map(item => {
+                                    return item.name
+                                })
+                                console.log(legendArr)
+
+                                const seriesArr = data.map(item => {
+                                    // return的这个对象就代表的是一个类别下的所有散点数据
+                                    // 如果想在地图中显示散点的数据, 我们需要给散点的图表增加一个配置, coordinateSystem:geo
+                                    return {
+                                        type: 'effectScatter',
+                                        rippleEffect: {
+                                            scale: 5,
+                                            brushType: 'stroke'
+                                        },
+                                        name: item.name,
+                                        data: [item.name, item.value],
+                                        coordinateSystem: 'geo'
+                                    }
+                                })
+                                const dataOption = {
+                                    legend: {
+                                        data: legendArr,
+                                        textStyle: {
+                                            color: '#ffffff' // 修改图例文字颜色
+                                        }
+                                    },
+                                    series: seriesArr
+                                }
+                                mapEcharts.setOption(dataOption)
+                            }
+                        })
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="layout layout-center-bottom">
+        <div class="panel border-all">
+            <div class="title">最适合出游指数(游记数量)</div>
+            <div class="chart" dg-chart-widget="" id="ksh">
+                <script>
+                    allData = []
+                    var kshEcharts = echarts.init(document.getElementById("ksh"), 'light')
+                    $.ajax({
+                        type: "GET",
+                        url: "/tripData",
+                        //返回的数据jQuery自动转换JSON对象
+                        dataType: "json",
+                        success: function (data) {
+                            allData = data
+                            console.log(allData)
+                            showkshData(allData)
+                        }
+                    })
+
+                    function showkshData(allData) {
+                        var score = []
+                        var month = []
+
+                        for (var i = 0; i < allData.length; i++) {
+                            score.push(allData[i].指数)
+                            month.push(allData[i].月份)
+                        }
+                        const options = {
+                            tooltip: {
+                                trigger: 'axis',
+                                axisPointer: {
+                                    type: 'shadow',
+                                    lineStyle: {
+                                        color: 'blue'
+                                    }
+                                }
+                            },
+                            //调整坐标系的位置
+                            grid: {
+                                top: '20%',
+                                left: '3%',
+                                right: "6%",
+                                bottom: "3%",
+                                containLabel: true // 距离是包含坐标轴上的文字的
+                            },
+                            xAxis: {
+                                type: "category",
+                                data: month,
+                                axisLabel: {
+                                    color: 'white' // 修改横坐标文字颜色
+                                }
+                            },
+                            yAxis: {
+                                type: "value",
+                                axisLabel: {
+                                    color: 'white' // 修改纵坐标文字颜色
+                                }
+                            },
+                            series: [
+                                {
+                                    type: "bar",
+                                    data: score,
+                                    barWidth: 30,
+                                    label: {
+                                        show: true,
+                                        position: "top",
+                                        color: 'red'
+                                    },
+                                    itemStyle: {
+                                        barBorderRadius: [22, 22, 0, 0],
+                                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                            {
+                                                offset: 0,
+                                                color: '#5052EE'
+                                            },
+                                            {
+                                                offset: 1,
+                                                color: '#AB6EE5'
+                                            }
+                                        ])
+                                    }
+                                }
+                            ]
+                        }
+                        kshEcharts.setOption(options)
+                    }
+
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="layout layout-right-top">
+        <div class="panel border-all title-bg">
+            <div class="title">游玩天数前十统计</div>
+            <div class="chart" dg-chart-widget="" id="rank2">
+                <script>
+                    allData = []
+                    var rankEcharts = echarts.init(document.getElementById("rank2"))
+
+                    //当窗口大小发生改变的时候，就执行screenAdapter函数
+                    window.addEventListener("resize", screenAdapter)
+
+                    $.ajax({
+                        type: "GET",
+                        url: "/rankDayData",
+                        //返回的数据jQuery自动转换JSON对象
+                        dataType: "json",
+                        success: function (data) {
+                            allData = data
+                            console.log(data)
+                            showrankData(allData)
+                        }
+                    })
+
+                    function screenAdapter() {
+                        // 适配
+                        const titleFontSize = document.getElementById("rank").offsetWidth / 100 * 3.6
+                        const adapterOptions = {
+                            title: {
+                                textStyle: {
+                                    fontSize: titleFontSize
+                                }
+                            },
+                            series: [
+                                {
+                                    barWidth: titleFontSize,
+                                    itemStyle: {
+                                        // 设置条柱的四个角的圆角半径
+                                        barBorderRadius: [titleFontSize / 2, titleFontSize / 2, 0, 2, 0]
+                                    }
+                                }
+                            ]
+                        }
+                        //setOption方法可以重复调用，echarts内部，不会进行覆盖叠加，整合
+                        rankEcharts.setOption(adapterOptions)
+                    }
+
+                    function showrankData(data) {
+
+                        var allName = []
+                        var allValue = []
+                        showData = data
+
+                        for (var i = 0; i < showData.length; i++) {
+                            allName.push(showData[i].name)
+                            allValue.push(showData[i].value)
+                        }
+                        console.log(allName);
+                        const options = {
+                            tooltip: {
+                                trigger: 'axis',
+                                axisPointer: {
+                                    type: 'shadow',
+                                    lineStyle: {
+                                        color: 'red'
+                                    }
+                                }
+                            },
+                            //调整坐标系的位置
+                            grid: {
+                                top: '20%',
+                                left: '3%',
+                                right: "10%",
+                                bottom: "10%",
+                                containLabel: true // 距离是包含坐标轴上的文字的
+                            },
+                            xAxis: {
+                                type: "category",
+                                data: allName,
+                                name: '天数',
+                                nameTextStyle: {
+                                    color: 'yellow' // 修改“天数”颜色
+                                },
+                                axisLabel: {
+                                    color: 'white' // 修改纵坐标文字颜色
+                                }
+
+                            },
+                            yAxis: {
+                                type: "value",
+                                name: '人数',
+                                nameTextStyle: {
+                                    color: 'yellow' // 修改“人数”颜色
+                                },
+                                axisLabel: {
+                                    color: 'white' // 修改纵坐标文字颜色
+                                }
+                            },
+                            series: [
+                                {
+                                    type: "line",
+                                    data: allValue,
+                                    markPoint: {
+                                        data: [
+                                            {type: 'max', name: 'Max'},
+                                            {type: 'min', name: 'Min'}
+                                        ]
+                                    },
+                                    barWidth: 66,
+                                    label: {
+                                        show: true,
+                                        position: "inside",
+                                        color: 'white'
+                                    },
+                                    itemStyle: {
+                                        barBorderRadius: [33, 33, 0, 0],
+                                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                            {
+                                                offset: 0,
+                                                color: '#5052EE'
+                                            },
+                                            {
+                                                offset: 1,
+                                                color: '#AB6EE5'
+                                            }
+                                        ])
+                                    }
+                                }
+                            ]
+                        }
+                        rankEcharts.setOption(options)
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="layout layout-right-center1">
+        <div class="panel border-all title-bg">
+            <div class="title">最奢侈餐厅推荐系数前八十</div>
+            <div class="chart" dg-chart-widget="" id="efsc">
+                <script>
+
+                    var efscEcharts = echarts.init(document.getElementById("efsc"))
+                    var allData = []
+                    $.ajax({
+                        type: "GET",
+                        url: "/efscdata",
+                        //返回的数据jQuery自动转换JSON对象
+                        dataType: "json",
+                        success: function (data) {
+                            console.log(data)
+                            allData = data
+                            console.log(allData)
+                            showEfscData(allData)
+
+                        }
+                    })
+
+                    function showEfscData(data) {
+                        var xvalueArr = data.data[0].xdata
+                        var yvalueArr = data.data[1].ydata
+                        var xydata = []
+
+                        for (var i = 0; i < xvalueArr.length; i++) {
+                            xydata.push([xvalueArr[i], yvalueArr[i]])
+
+                        }
+
+                        console.log(xydata)
+
+                        //console.log(yvalueArr.length)
+                        const option = {
+                            tooltip: {
+                                trigger: 'axis',
+                                axisPointer: {
+                                    type: 'cross'
+                                }
+                            },
+                            xAxis: {
+                                splitLine: {
+                                    lineStyle: {
+                                        type: 'dashed'
+                                    }
+                                },
+                                scale: true
+                            },
+                            yAxis: {
+                                splitLine: {
+                                    lineStyle: {
+                                        type: 'dashed'
+                                    }
+                                },
+                                scale: true
+                            },
+                            series: [
+                                {
+                                    type: 'effectScatter',
+                                    symbolSize: 10,
+                                    data: xydata,
+                                    color: 'yellow'
+                                },
+                            ]
+
+                        };
+                        efscEcharts.setOption(option)
+                    }
+
+                </script>
+            </div>
+            <div class="border-foot"></div>
         </div>
     </div>
 </div>
+<div class="layout layout-right-center2">
+    <div class="panel border-all title-bg">
+        <div class="title">美食和景点价格前十的热度</div>
+        <div class="chart" dg-chart-widget="" id="bub">
+            <script>
+                allData = []
+                var bubEcharts = echarts.init(document.getElementById("bub"))
+                $.ajax({
+                    type: "GET",
+                    url: "/prodata",
+                    //返回的数据jQuery自动转换JSON对象
+                    dataType: "json",
+                    success: function (data) {
+                        allData = data
+                        // console.log(data)
+                        showBubData(allData)
+                    }
+                })
 
-<script src="./js/rem.js"></script>
-<script src="./js/jquery.js"></script>
-<script src="./js/date.js"></script>
-<script src="./js/weather.js"></script>
-<script src="./js/satisfaction.js"></script>
-<script src="./js/setData.js"></script>
-<script src="./js/echarts.min.js"></script>
-<script src="./js/chart.js"></script>
-<script src="./js/index.js">
+                function showBubData(data) {
+                    var year20_v = []
+                    var year20 = []
+                    var year20_s = []
+                    var year18 = []
+                    var year18_s = []
+                    var year18_v = []
+                    for (var i = 0; i < data.length / 2; i++) {
+                        year20_v.push((data[i].热度 + data[i].价格) / 100)
+                        year20_s.push(data[i].名称)
+                    }
+                    for (var i = 0; i < data.length / 4; i++) {
+                        year20.push(year20_v[i], year20_s[i])
+                    }
 
-</script>
+                    for (var i = data.length / 2; i < data.length; i++) {
+                        year18_v.push((data[i].热度 + data[i].价格) / 100)
+                        year18_s.push(data[i].名称)
+                    }
+                    for (var i = data.length / 4; i < data.length / 2; i++) {
+                        year18.push(year18_v[i], year18_s[i])
+                    }
+                    console.log(year20_v)
+                    console.log(year20_s)
+                    console.log(year20)
 
+                    console.log(year18_v)
+                    console.log(year18_s)
+                    console.log(year18)
+                    const option = {
+                        backgroundColor: new echarts.graphic.RadialGradient(0.3, 0.3, 0.8, [
+                            {
+                                offset: 0,
+                                color: '#f7f8fa'
+                            },
+                            {
+                                offset: 1,
+                                color: '#cdd0d5'
+                            }
+                        ]),
+                        title: {
+                            text: '美食和景点价格前十的热度',
+                            left: '5%',
+                            top: '3%'
+                        },
+                        legend: {
+                            right: '10%',
+                            top: '5%',
+                            data: ['景点', '美食']
+                        },
+                        grid: {
+                            left: '8%',
+                            top: '10%'
+                        },
+                        xAxis: {
+                            splitLine: {
+                                lineStyle: {
+                                    type: 'dashed'
+                                }
+                            }
+                        },
+                        yAxis: {
+                            splitLine: {
+                                lineStyle: {
+                                    type: 'dashed'
+                                }
+                            },
+                            scale: true
+                        },
+                        series: [
+                            {
+                                name: '景点',
+                                data: year20,
+                                type: 'scatter',
+                                symbolSize: year20_v,
+                                emphasis: {
+                                    focus: 'series',
+                                    label: {
+                                        show: true,
+                                        formatter: year20_s,
+                                        position: 'top'
+                                    }
+                                },
+                                itemStyle: {
+                                    shadowBlur: 10,
+                                    shadowColor: 'rgba(120, 36, 50, 0.5)',
+                                    shadowOffsetY: 5,
+                                    color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [
+                                        {
+                                            offset: 0,
+                                            color: 'rgb(251, 118, 123)'
+                                        },
+                                        {
+                                            offset: 1,
+                                            color: 'rgb(204, 46, 72)'
+                                        }
+                                    ])
+                                }
+                            },
+                            {
+                                name: '美食',
+                                data: year18,
+                                type: 'scatter',
+                                symbolSize: year18_v,
+                                emphasis: {
+                                    focus: 'series',
+                                    label: {
+                                        show: true,
+                                        formatter: year18_s,
+                                        position: 'top'
+                                    }
+                                },
+                                itemStyle: {
+                                    shadowBlur: 10,
+                                    shadowColor: 'rgba(25, 100, 150, 0.5)',
+                                    shadowOffsetY: 5,
+                                    color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [
+                                        {
+                                            offset: 0,
+                                            color: 'rgb(129, 227, 238)'
+                                        },
+                                        {
+                                            offset: 1,
+                                            color: 'rgb(25, 183, 207)'
+                                        }
+                                    ])
+                                }
+                            }
+                        ]
+                    };
+                    bubEcharts.setOption(option)
+                }
+            </script>
+        </div>
+        <div class="border-foot"></div>
+    </div>
+</div>
+<div class="layout layout-right-bottom">
+    <div class="panel border-all title-bg">
+        <div class="title">▎景点评分大全</div>
+        <div class="chart" dg-chart-widget="" id="score">
+            <script>
+                allData = []
+                var totalScorePage = 0
+                var currentScorePage = 1
+                var timerId = 0
+                var scoreEcharts = echarts.init(document.getElementById("score"))
+
+                //给当前图表注册事件
+                // 接受参数：事件名，事件反应行为
+                scoreEcharts.on("mouseover", function () {
+                    // 当鼠标移动到图形上时，停止定时器
+                    clearInterval(timerId)
+                })
+                scoreEcharts.on("mouseout", function () {
+                    startScoreInterval(allData)
+                })
+                //当窗口大小发生改变的时候，就执行screenAdapter函数
+                window.addEventListener("resize", screenAdapter)
+
+                $.ajax({
+                    type: "GET",
+                    url: "/scoredata",
+                    //返回的数据jQuery自动转换JSON对象
+                    dataType: "json",
+                    success: function (data) {
+                        allData = data
+                        totalScorePage = data.length % 5 === 0 ? data.length / 5 : data.length / 5 + 1
+                        showScoreData(allData)
+                        startScoreInterval()
+                    }
+                })
+
+                function screenAdapter() {
+                    // 适配
+                    const titleFontSize = document.getElementById("score").offsetWidth / 100 * 3.6
+                    const adapterOptions = {
+                        title: {
+                            textStyle: {
+                                fontSize: titleFontSize
+                            }
+                        },
+                        series: [
+                            {
+                                barWidth: titleFontSize,
+                                itemStyle: {
+                                    // 设置条柱的四个角的圆角半径
+                                    barBorderRadius: [0, titleFontSize / 2, titleFontSize / 2, 0]
+                                }
+                            }
+                        ]
+                    }
+                    //setOption方法可以重复调用，echarts内部，不会进行覆盖叠加，整合
+                    scoreEcharts.setOption(adapterOptions)
+                }
+
+                function showScoreData(data) {
+                    const start = (currentScorePage - 1) * 8
+                    const end = currentScorePage * 8
+                    showScore = data.slice(start, end)
+                    showScore.sort(function (a, b) {
+                        return a.评分 - b.评分
+                    })
+                    console.log(showScore)
+                    var allScore = []
+                    var allTrip = []
+
+                    for (var i = 0; i < showScore.length; i++) {
+                        allScore.push(showScore[i].评分)
+                        allTrip.push(showScore[i].景点)
+                    }
+                    console.log(allTrip)
+                    const options = {
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'shadow',
+                                lineStyle: {
+                                    color: 'blue'
+                                }
+                            }
+                        },
+                        //调整坐标系的位置
+                        grid: {
+                            top: '20%',
+                            left: '3%',
+                            right: "6%",
+                            bottom: "3%",
+                            containLabel: true // 距离是包含坐标轴上的文字的
+                        },
+                        xAxis: {
+                            type: "value",
+                            axisLabel: {
+                                color: 'white' // 修改横坐标文字颜色
+                            },
+                            splitLine: {
+                                lineStyle: {
+                                    color: 'gray' // 修改横坐标网格线颜色
+                                }
+                            }
+                        },
+                        yAxis: {
+                            type: "category",
+                            data: allTrip,
+                            axisLabel: {
+                                interval: 0, // 控制X轴刻度全部显示
+                                rotate: -15, // 倾斜角度
+                                color: 'white' // 修改纵坐标文字颜色
+                            },
+                            splitLine: {
+                                lineStyle: {
+                                    color: 'gray' // 修改纵坐标网格线颜色
+                                }
+                            }
+                        },
+                        series: [
+                            {
+                                type: "bar",
+                                data: allScore,
+                                barWidth: 10,
+                                label: {
+                                    show: true,
+                                    position: "right",
+                                    color: 'black'
+                                },
+                                itemStyle: {
+                                    barBorderRadius: [0, 11, 11, 0],
+                                    color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                        {
+                                            offset: 0,
+                                            color: 'green'
+                                        },
+                                        {
+                                            offset: 1,
+                                            color: 'blue'
+                                        }
+                                    ])
+                                }
+                            }
+                        ]
+                    }
+                    scoreEcharts.setOption(options)
+                }
+
+                // 完成周期性更新界面的逻辑
+                function startScoreInterval() {
+                    if (timerId) {
+                        clearInterval(timerId)
+                    }
+                    timerId = setInterval(function () {
+                        if (currentScorePage > totalScorePage) {
+                            currentScorePage = 1
+                        }
+                        showScoreData(allData)
+                        currentScorePage += 1
+                    }, 2000)
+                }
+            </script>
+        </div>
+    </div>
+</div>
+</div>
 </body>
+
 </html>

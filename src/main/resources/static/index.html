@@ -241,7 +241,7 @@
               this.loadContent(3,key);
             },
             loadContent(type,categoryId){
-                //请求食谱所有数据的前4条
+                // 请求食谱所有数据的前4条
                 axios.get("/v1/contents/"+type+"/"+categoryId+"/index").then(function (response) {
                     if (response.data.code==1){
                         switch (type){

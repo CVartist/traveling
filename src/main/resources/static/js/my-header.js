@@ -27,7 +27,7 @@ Vue.component('my-header', {
             if (key == 0) {
                 location.href = "/";
             } else if (key == 4) {
-                location.href = "/bigDataView.html";
+                location.href = "http://127.0.0.1:5000/static/bigDataView.html";
             } else {
                 location.href = "/contentList.html?type=" + key;
             }

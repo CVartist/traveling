@@ -5,34 +5,42 @@
     <!-- import CSS -->
     <link rel="stylesheet" href="https://cdn.staticfile.org/element-ui/2.15.9/theme-chalk/index.css">
     <style>
-        body{
-            background-color: rgb(241,242,243);
+        body {
+            background-color: rgb(241, 242, 243);
         }
-        .el-header{
+
+        .el-header {
             background-color: white;
         }
-        .center{width: 1200px;margin: 0 auto}
-        footer h3{
+
+        .center {
+            width: 1200px;
+            margin: 0 auto
+        }
+
+        footer h3 {
             color: white;
         }
-        #footer_center p{
+
+        #footer_center p {
             margin: 0;
         }
 
-        .title_p{
+        .title_p {
             height: 40px;
             overflow: hidden;
             /*设置超出的部分用省略号展示*/
             display: -webkit-box;
-            -webkit-line-clamp:2; /*设置显示的行数*/
-            -webkit-box-orient: vertical;  /*设置纵向排列*/
+            -webkit-line-clamp: 2; /*设置显示的行数*/
+            -webkit-box-orient: vertical; /*设置纵向排列*/
         }
 
-        a{
+        a {
             text-decoration: none;
             color: black;
         }
-        a:hover{
+
+        a:hover {
             color: orange;
         }
     </style>
@@ -43,28 +51,34 @@
         <my-header></my-header>
         <el-main class="center" style="margin-top: 30px">
             <!--食谱开始-->
-                <el-row gutter="20">
-                    <el-col span="6" v-for="item in contentArr">
-                        <el-card style="margin: 10px 0">
-                            <a :href="'/detail.html?id='+item.id">
-                                <img :src="item.imgUrl" width="100%" height="144">
-                                <p class="title_p">{{item.title}}</p>
-                            </a>
+            <el-row gutter="20">
+                <el-col span="6" v-for="item in contentArr">
+                    <el-card style="margin: 10px 0">
+                        <a :href="'/detail.html?id='+item.id">
+                            <img :src="item.imgUrl" width="100%" height="144">
+                            <p class="title_p">{{item.title}}</p>
+                        </a>
 
-                            <el-row>
-                                <el-col span="4">
-                                    <el-avatar size="small" :src="item.userImgUrl"></el-avatar>
-                                </el-col>
-                                <el-col span="10">{{item.nickName}}</el-col>
-                                <el-col span="10">
+                        <el-row>
+                            <el-col span="4">
+                                <el-avatar size="small" :src="item.userImgUrl"></el-avatar>
+                            </el-col>
+                            <el-col span="10">{{item.nickName}}</el-col>
+                            <el-col span="10">
                                     <span style="float: right;
                                     font-size: 12px;color: #666">{{item.categoryName}}</span>
-                                </el-col>
-                            </el-row>
-                        </el-card>
-                    </el-col>
-                </el-row>
+                            </el-col>
+                        </el-row>
+                    </el-card>
+                </el-col>
+            </el-row>
             <!--食谱结束-->
+            <el-pagination
+                    :current-page="currentPage"
+                    :page-size="pageSize"
+                    :total="totalItems"
+                    @current-change="handlePageChange">
+            </el-pagination>
         </el-main>
         <el-footer style="background-color: #2f3234;
         height: 280px;padding: 50px 0">
@@ -80,19 +94,26 @@
                         <el-row id="footer_center">
                             <el-col span="8">
                                 <h3>关于我们</h3>
-                                <p>关于我们</p><p>旅游顾问</p>
-                                <p>旅游攻略</p><p>分类信息</p>
-                                <p>求职招聘</p><p>社区交流</p>
+                                <p>关于我们</p>
+                                <p>旅游顾问</p>
+                                <p>旅游攻略</p>
+                                <p>分类信息</p>
+                                <p>求职招聘</p>
+                                <p>社区交流</p>
                             </el-col>
                             <el-col span="8">
                                 <h3>服务与支持</h3>
-                                <p>联系我们</p><p>广告投放</p>
-                                <p>用户协议</p><p>友情链接</p>
-                                <p>在线反馈</p><p>我发投稿</p>
+                                <p>联系我们</p>
+                                <p>广告投放</p>
+                                <p>用户协议</p>
+                                <p>友情链接</p>
+                                <p>在线反馈</p>
+                                <p>我发投稿</p>
                             </el-col>
                             <el-col span="8">
                                 <h3>底部导航</h3>
-                                <p>Archiver</p><p>手机版</p>
+                                <p>Archiver</p>
+                                <p>手机版</p>
                                 <p>小黑屋</p>
                             </el-col>
                         </el-row>
@@ -121,32 +142,39 @@
         el: '#app',
         data: function () {
             return {
-                contentArr:[]
+                contentArr: [],
+                currentPage: 1,
+                pageSize: 20,
+                totalItems: 0 // 总项目数
+            }
+        },
+        computed: {
+            paginatedData() {
+                const start = (this.currentPage - 1) * this.pageSize;
+                return this.contentArr.slice(start, start + this.pageSize);
             }
         },
         methods: {
-
+            fetchData(page) {
+                const url = `/v1/contents/${this.getType()}/list?page=${page}&size=${this.pageSize}`;
+                axios.get(url).then((response) => {
+                    if (response.data.code == 1) {
+                        this.contentArr = response.data.data;
+                        this.totalItems = response.data.total; // 假设后端返回总项目数
+                    }
+                });
+            },
+            handlePageChange(page) {
+                this.currentPage = page;
+                this.fetchData(page);
+            },
+            getType() {
+                // 获取类型的逻辑
+                return new URLSearchParams(location.search).get("type") || 1; // 默认类型
+            }
         },
-        created:function () {
-            if (location.search.includes("type")){
-                let type = new URLSearchParams(location.search).get("type");
-                axios.get("/v1/contents/"+type+"/list").then(function (response) {
-                    if (response.data.code==1){
-                        v.contentArr = response.data.data;
-                    }
-                })
-            }
-            //判断是否包含wd
-            if (location.search.includes("wd")){
-                let wd = new URLSearchParams(location.search).get("wd");
-                axios.get("/v1/contents/"+wd+"/search").then(function (response) {
-                    if (response.data.code==1){
-                        v.contentArr = response.data.data;
-                    }
-                })
-            }
-
-
+        created: function () {
+            this.fetchData(this.currentPage); // 初始加载第一页
         }
     })
 </script>

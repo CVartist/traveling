@@ -3,6 +3,9 @@ package com.example.traveling.controller;
 import com.example.traveling.mapper.ContentMapper;
 import com.example.traveling.pojo.dto.ContentDTO;
 import com.example.traveling.pojo.entity.Content;
+import com.example.traveling.pojo.vo.ContentAdminVO;
+import com.example.traveling.pojo.vo.ContentIndexVO;
+import com.example.traveling.pojo.vo.ContentManagementVO;
 import com.example.traveling.pojo.vo.ContentUpdateVO;
 import com.example.traveling.response.JsonResult;
 import com.example.traveling.security.CustomUserDetails;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 @Api(tags = "500.稿件管理模块")
 @RestController
@@ -77,8 +81,15 @@ public class ContentController {
     }
 
     @GetMapping("{type}/list")
-    public JsonResult selectList(@PathVariable Integer type) {
-        return JsonResult.ok(contentMapper.selectListByType(type));
+    public JsonResult selectList(@PathVariable Integer type,
+                                 @RequestParam(defaultValue = "1") int page,
+                                 @RequestParam(defaultValue = "20") int size) {
+        int offset = (page - 1) * size;
+        List<ContentIndexVO> contentList = contentMapper.selectListByType(type, offset, size);
+
+        // 获取总数
+        Long totalCount = (long) contentMapper.getCountByType(type); // 新增方法获取总数
+        return JsonResult.ok(contentList, totalCount); // 返回内容和总数
     }
 
     @GetMapping("/{wd}/search")
@@ -87,8 +98,13 @@ public class ContentController {
     }
 
     @GetMapping("/{type}/admin")
-    public JsonResult selectForAdmin(@PathVariable Integer type) {
-        return JsonResult.ok(contentMapper.selectByTypeForAdmin(type));
+    public JsonResult selectForAdmin(@PathVariable Integer type,
+                                     @RequestParam(defaultValue = "1") int page,
+                                     @RequestParam(defaultValue = "10") int size) {
+        int offset = (page - 1) * size;
+        List<ContentAdminVO> contentList = contentMapper.selectByTypeForAdmin(type, offset, size);
+        long totalCount = contentMapper.getCountByType(type); // 获取总数
+        return JsonResult.ok(contentList, totalCount); // 返回内容和总数
     }
 
     @GetMapping("{id}/detail")

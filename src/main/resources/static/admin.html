@@ -25,9 +25,9 @@
                     <el-divider></el-divider>
                     <el-menu-item index="1"><i class="el-icon-user">用户管理</i></el-menu-item>
                     <el-menu-item index="2"><i class="el-icon-picture">轮播图</i></el-menu-item>
-                    <el-menu-item index="3"><i class="el-icon-s-order">烘焙食谱</i></el-menu-item>
-                    <el-menu-item index="4"><i class="el-icon-video-camera">烘焙视频</i></el-menu-item>
-                    <el-menu-item index="5"><i class="el-icon-info">行业资讯</i></el-menu-item>
+                    <el-menu-item index="3"><i class="el-icon-s-order">景点管理</i></el-menu-item>
+                    <el-menu-item index="4"><i class="el-icon-video-camera">美食管理</i></el-menu-item>
+                    <el-menu-item index="5"><i class="el-icon-info">游记管理</i></el-menu-item>
                 </el-menu>
             </el-aside>
             <el-main>
@@ -118,6 +118,13 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <el-pagination
+                        v-if="currentIndex > 2"
+                        :current-page="currentPage"
+                        :page-size="pageSize"
+                        :total="totalItems"
+                        @current-change="handlePageChange">
+                </el-pagination>
                 <!--内容表格结束-->
             </el-main>
         </el-container>
@@ -139,10 +146,26 @@
                 userArr: [],
                 bannerArr: [],
                 contentArr: [],
-                user: localStorage.user ? JSON.parse(localStorage.user) : ""
+                user: localStorage.user ? JSON.parse(localStorage.user) : "",
+                currentPage: 1, // 当前页码
+                pageSize: 10, // 每页显示数量
+                totalItems: 0 // 总项目数
             }
         },
         methods: {
+            fetchContentData(page) {
+                axios.get(`/v1/contents/${this.currentIndex - 2}/admin?page=${page}&size=${this.pageSize}`)
+                    .then(response => {
+                        if (response.data.code == 1) {
+                            this.contentArr = response.data.data; // 更新内容数据
+                            this.totalItems = response.data.total; // 更新总数
+                        }
+                    });
+            },
+            handlePageChange(page) {
+                this.currentPage = page; // 更新当前页码
+                this.fetchContentData(page); // 重新请求数据
+            },
             contentEdit(i, c) {
                 let type = v.currentIndex - 2;
                 location.href = "/postArticle.html?type=" + type + "&id=" + c.id;
@@ -239,13 +262,20 @@
             if (location.search.includes("key")) {
                 let key = new URLSearchParams(location.search).get("key");
                 this.currentIndex = key;
-                if (key > 2) {
-                    let type = key - 2;
-                    axios.get("/v1/contents/" + type + "/admin").then(function (response) {
-                        if (response.data.code == 1) {
-                            v.contentArr = response.data.data;
-                        }
-                    })
+                // if (key > 2) {
+                //     let type = key - 2;
+                //     axios.get("/v1/contents/" + type + "/admin").then(function (response) {
+                //         if (response.data.code == 1) {
+                //             v.contentArr = response.data.data;
+                //         }
+                //     })
+                // }
+                if (location.search.includes("key")) {
+                    let key = new URLSearchParams(location.search).get("key");
+                    this.currentIndex = key;
+                    if (key > 2) {
+                        this.fetchContentData(this.currentPage); // 初始加载内容数据
+                    }
                 }
             }
 

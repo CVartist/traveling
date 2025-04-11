@@ -40,12 +40,9 @@
                con.create_time,
                cat.name categoryName
         FROM t_content con
-                 INNER JOIN t_category cat
-                            ON con.category_id = cat.id
-        WHERE con.type = #{type}
-          AND con.create_by = #{id}
+                 INNER JOIN t_category cat ON con.category_id = cat.id
+        WHERE con.type = #{type} AND con.create_by = #{id}
     </select>
-
     <!--
     编辑稿件时,回显需要编辑的稿件内容
     -->
@@ -178,6 +175,13 @@
         <include refid="s1"></include>
         WHERE c.type = #{type} AND c.img_url != '/imgs/icon.png'
         ORDER BY c.view_count DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="getCountByType" resultType="int">
+        SELECT COUNT(*)
+        FROM t_content c
+        WHERE c.type = #{type} AND c.img_url != '/imgs/icon.png'
     </select>
     <!--
     根据关键字搜索稿件,主要是使用模糊查询
@@ -212,8 +216,8 @@
         FROM t_content c
                  INNER JOIN t_category cat ON c.category_id = cat.id
         WHERE c.type = #{type}
+        LIMIT #{limit} OFFSET #{offset}
     </select>
-
     <!--
     占位符的名字,和接口的形参名要保持一致
     -->

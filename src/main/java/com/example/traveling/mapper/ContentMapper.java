@@ -3,6 +3,8 @@ package com.example.traveling.mapper;
 import com.example.traveling.pojo.entity.Content;
 import com.example.traveling.pojo.vo.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -18,12 +20,12 @@ public interface ContentMapper {
     /**
      * 查询当前用户的各类型稿件信息
      *
-     * @param type 稿件类型 1 → 食谱 2 → 视频 3 → 咨询
+     * @param type 稿件类型 1 → jingd 2 → 视频 3 → 咨询
      * @param id   用户id
      * @return 稿件集合
      */
     List<ContentManagementVO> selectByType(Integer type, Long id);
-
+//    List<ContentManagementVO> selectByType(Integer type, Long id, int offset, int limit);
     /**
      * 编辑稿件时,根据稿件的id查询稿件信息
      *
@@ -95,7 +97,10 @@ public interface ContentMapper {
      * @param type 一级分类
      * @return 稿件信息
      */
-    List<ContentIndexVO> selectListByType(Integer type);
+    @Cacheable(value = "contentListCache",  key = "#type + '_' + #offset + '_' + #limit")
+    List<ContentIndexVO> selectListByType(@Param("type") Integer type, @Param("offset") int offset, @Param("limit") int limit);
+
+    int getCountByType(@Param("type") Integer type);
 
     /**
      * 根据关键字查询稿件信息
@@ -111,8 +116,8 @@ public interface ContentMapper {
      * @param type 一级分类
      * @return 稿件信息
      */
-    List<ContentAdminVO> selectByTypeForAdmin(Integer type);
-
+//    List<ContentAdminVO> selectByTypeForAdmin(Integer type);
+    List<ContentAdminVO> selectByTypeForAdmin(Integer type, int offset, int limit);
     /**
      * 根据稿件id修改稿件的评论量
      *

@@ -23,6 +23,8 @@ public class JsonResult {
      */
     private Object data;
 
+    private Long total;
+
     /**
      * 构造方法1:适用于不需要返回具体数据的Controller方法
      */
@@ -57,6 +59,14 @@ public class JsonResult {
         this.data = data;
     }
 
+    // 新增构造方法，用于返回数据和总数
+    public JsonResult(Object data, Long total) {
+        this.code = StatusCode.SUCCESS.getCode();
+        this.msg = StatusCode.SUCCESS.getMsg();
+        this.data = data;
+        this.total = total; // 设置总数
+    }
+
     /**
      * 2个静态方法,用于快速创建JsonResult对象
      * 一种是有返回数据data的;
@@ -64,6 +74,11 @@ public class JsonResult {
      */
     public static JsonResult ok(Object data) {
         return new JsonResult(data);
+    }
+
+    // 新增静态方法，用于返回数据和总数
+    public static JsonResult ok(Object data, Long total) {
+        return new JsonResult(data, total);
     }
 
     public static JsonResult ok() {

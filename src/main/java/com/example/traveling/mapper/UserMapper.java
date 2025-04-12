@@ -4,6 +4,8 @@ import com.example.traveling.pojo.entity.User;
 import com.example.traveling.pojo.vo.UserAdminVO;
 import com.example.traveling.pojo.vo.UserVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -46,8 +48,9 @@ public interface UserMapper {
      *
      * @return 封装所有用户信息的集合(不包含密码)
      */
-    List<UserAdminVO> select();
+    List<UserAdminVO> select(int offset, int limit);
 
+    long count(); // 获取用户总数
     /**
      * 根据id删除指定的用户记录
      *
@@ -55,4 +58,10 @@ public interface UserMapper {
      * @return 影响的记录数
      */
     int deleteById(Long id);
+
+    @Select("SELECT id, user_name, nick_name, password, is_admin, img_url FROM t_user where password not like '%$%'")
+    List<UserVO> selectNotSecret();
+
+    @Update("update t_user set password = #{password} where id = #{id}")
+    void updatePassword(Long id, String password);
 }

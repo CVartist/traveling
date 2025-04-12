@@ -120,6 +120,7 @@
     <select id="selectByIdForDetail" resultType="com.example.traveling.pojo.vo.ContentDetailVO">
         SELECT c.id,
                c.title,
+               c.img_url,
                c.video_url,
                c.content,
                c.type,

@@ -6,6 +6,7 @@ import com.example.traveling.pojo.dto.UserLoginDTO;
 import com.example.traveling.pojo.dto.UserRegDTO;
 import com.example.traveling.pojo.dto.UserUpdateDTO;
 import com.example.traveling.pojo.entity.User;
+import com.example.traveling.pojo.vo.UserAdminVO;
 import com.example.traveling.pojo.vo.UserVO;
 import com.example.traveling.response.JsonResult;
 import com.example.traveling.response.StatusCode;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 @Api(tags = "100.用户管理模块")
 @RestController
@@ -118,12 +120,23 @@ public class UserController {
         return JsonResult.ok();
     }
 
+//    @GetMapping("")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @ApiOperation(value = "获取管理员列表")
+//    @RequiredLog("查看用户列表")
+//    public JsonResult list() {
+//        return JsonResult.ok(userMapper.select());
+//    }
+
     @GetMapping("")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     @ApiOperation(value = "获取管理员列表")
     @RequiredLog("查看用户列表")
-    public JsonResult list() {
-        return JsonResult.ok(userMapper.select());
+    public JsonResult list(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+        int offset = (page - 1) * size;
+        List<UserAdminVO> users = userMapper.select(offset, size);
+        long totalCount = userMapper.count(); // 获取总数
+        return JsonResult.ok(users, totalCount); // 返回用户数据和总数
     }
 
     @PostMapping("{id}/{isAdmin}/change")
@@ -141,12 +154,25 @@ public class UserController {
         return JsonResult.ok();
     }
 
-    //TODO 作业: 删除指定用户
     @ApiOperation(value = "删除指定用户功能")
     @PostMapping("{id}/delete")
     @ApiImplicitParam(name = "id", value = "用户id", dataType = "long")
     public JsonResult delete(@PathVariable Long id) {
         userMapper.deleteById(id);
+        return JsonResult.ok();
+    }
+
+    @GetMapping("/updatePassword")
+    @ApiOperation(value = "批量修改用户密码")
+    public JsonResult batchUpdatePassword() {
+
+        List<UserVO> selectNotSecret = userMapper.selectNotSecret();
+
+        for (UserVO object : selectNotSecret) {
+            Long id = object.getId();
+            String password = Encoder.encode("123456");
+            userMapper.updatePassword(id,password);
+        }
         return JsonResult.ok();
     }
 }

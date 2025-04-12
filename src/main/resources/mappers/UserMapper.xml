@@ -50,10 +50,22 @@
     管理员页面的用户列表,不需要显示密码,所以不查询密码
     展示用户信息时,根据用户创建时间,从近到远排序
     -->
+<!--    <select id="select" resultType="com.example.traveling.pojo.vo.UserAdminVO">-->
+<!--        SELECT id, user_name, nick_name, is_admin, create_time, img_url-->
+<!--        FROM t_user-->
+<!--        ORDER BY create_time DESC-->
+<!--    </select>-->
+
     <select id="select" resultType="com.example.traveling.pojo.vo.UserAdminVO">
         SELECT id, user_name, nick_name, is_admin, create_time, img_url
         FROM t_user
         ORDER BY create_time DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(*)
+        FROM t_user
     </select>
 
     <delete id="deleteById">

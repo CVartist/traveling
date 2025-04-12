@@ -58,12 +58,14 @@
                         作者:{{c.nickName}} | 发布时间:{{c.createTime}} | 阅读次数:{{c.viewCount}}
                     </p>
                     <el-divider></el-divider>
-                    <div v-if="c.type!=2">
+                    <div v-if="c.type != 2">
                         <el-card style="font-size: 12px;">
                             <b style="color: #409EFF">摘要:</b>
-                            {{c.brief}}
+                            {{ c.brief }}
                         </el-card>
                         <p v-html="c.content"></p>
+                        <!-- 图片展示 -->
+                        <img v-if="c.imgUrl" :src="c.imgUrl" alt="文章图片" style="width: 100%; margin-top: 10px;">
                     </div>
                     <div v-else>
                         <video style="width: 100%" :src="c.videoUrl"

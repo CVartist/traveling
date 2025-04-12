@@ -338,3 +338,33 @@ select title, price,comment_count,comment_score from  t_content where type = 1 o
 
 
 select title,comment_score from t_content where type = 1;
+
+
+create table t_comment
+(
+    id          bigint(11) auto_increment
+        primary key,
+    content     varchar(255) not null comment '评论内容',
+    user_id     bigint(11)   not null comment '评论用户ID',
+    content_id  int          not null comment '评论内容ID',
+    create_time datetime     not null comment '创建时间'
+)
+    comment '评论表';
+
+create table t_log
+(
+    id           bigint auto_increment
+        primary key,
+    username     varchar(50)   null comment '用户名',
+    operation    varchar(50)   null comment '用户操作',
+    method       varchar(200)  null comment '请求方法',
+    params       varchar(5000) null comment '请求参数',
+    time         bigint        not null comment '执行时长(毫秒)',
+    ip           varchar(64)   null comment 'IP地址',
+    created_time datetime      null comment '创建时间',
+    status       int default 1 null,
+    error        varchar(500)  null
+)
+    comment '用户日志';
+
+SELECT id, user_name, nick_name, is_admin, img_url, password FROM t_user WHERE user_name = 'lxj'

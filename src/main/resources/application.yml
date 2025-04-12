@@ -25,6 +25,7 @@ logging:
   level:
     # 应用级别日志
     com.example.traveling: debug
+    org.springframework.security: DEBUG
 
 # MyBatis配置
 mybatis:

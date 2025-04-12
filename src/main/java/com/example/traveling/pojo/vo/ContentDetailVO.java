@@ -15,6 +15,9 @@ public class ContentDetailVO {
     /**
      * 视频(存储的是视频的路径)
      */
+    private String imgUrl;
+
+
     private String videoUrl;
     /**
      * 稿件正文(页面富文本编辑器录入的内容,实际上是html代码)

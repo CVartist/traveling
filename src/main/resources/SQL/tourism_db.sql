@@ -393,7 +393,3 @@ create table t_banner
     create_time datetime     not null comment '创建时间'
 )
     comment '轮播图表';
-
-
-
-333

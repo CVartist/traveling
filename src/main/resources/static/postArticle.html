@@ -52,16 +52,18 @@
                 </el-col>
                 <el-col span="20">
                     <el-card>
-                        <h1 style="color: orange;font-size: 35px">{{c.id==null?'发布文章页面':'修改文章页面'}}</h1>
+                        <h1 style="color: orange;font-size: 35px">
+                            {{c.id == null ? '发布文章页面' : '修改文章页面'}}</h1>
                         <el-form label-width="80px">
                             <el-form-item label="文章标题">
-                                <el-input placeholder="请输入文章标题" style="width: 300px" v-model="c.title"></el-input>
+                                <el-input placeholder="请输入文章标题" style="width: 300px"
+                                          v-model="c.title"></el-input>
                             </el-form-item>
                             <el-form-item label="文章分类">
                                 <el-radio-group :disabled="c.id!=null" @input="handleInput" v-model="c.type">
-                                    <el-radio-button label="1">食谱</el-radio-button>
-                                    <el-radio-button label="2">视频</el-radio-button>
-                                    <el-radio-button label="3">资讯</el-radio-button>
+                                    <el-radio-button v-if="c.type === '1'" label="1">景点</el-radio-button>
+                                    <el-radio-button v-if="c.type === '2'" label="2">美食</el-radio-button>
+                                    <el-radio-button v-if="c.type === '3'" label="3">游记</el-radio-button>
                                 </el-radio-group>
                             </el-form-item>
                             <el-form-item label="二级分类">
@@ -115,7 +117,8 @@
                                 <!--***********富文本编辑器结束************-->
                             </el-form-item>
                             <el-form-item>
-                                <el-button type="primary" @click="post()">{{c.id==null?'发布文章':'修改文章'}}</el-button>
+                                <el-button type="primary" @click="post()">{{c.id == null ? '发布文章' : '修改文章'}}
+                                </el-button>
                             </el-form-item>
 
                         </el-form>
@@ -196,12 +199,12 @@
                 dialogImageUrl: '',
                 dialogVisible: false,
                 categoryArr: [],
-                oldImgUrl:""
+                oldImgUrl: ""
             }
         },
         methods: {
             post() {
-                if (v.c.type==2&&v.c.videoUrl==""){
+                if (v.c.type == 2 && v.c.videoUrl == "") {
                     v.$message.error("请选择视频文件!");
                     return;
                 }
@@ -218,11 +221,11 @@
                     v.c.createBy = user.id;//设置作者id
                 }
                 //设置摘要
-                v.c.brief = editor.getText().slice(0,50);
+                v.c.brief = editor.getText().slice(0, 50);
                 //发出发布文章请求
-                axios.post("/v1/contents/add-new",v.c).then(function (response) {
-                    if (response.data.code==1){
-                        location.href="articleManagement.html?type="+v.c.type;
+                axios.post("/v1/contents/add-new", v.c).then(function (response) {
+                    if (response.data.code == 1) {
+                        location.href = "articleManagement.html?type=" + v.c.type;
 
                     }
                 })
@@ -230,11 +233,11 @@
             },
             handleSuccess(response, file, fileList) {
 
-                console.log("file="+file.raw.type);
+                console.log("file=" + file.raw.type);
                 //判断上传的文件是图片还是视频
-                if (file.raw.type.includes('image')){//图片
+                if (file.raw.type.includes('image')) {//图片
                     v.c.imgUrl = response.data;
-                }else{//视频
+                } else {//视频
                     v.c.videoUrl = response.data;
                 }
 
@@ -258,9 +261,9 @@
             },
             handleRemove(file, fileList) {
                 //判断上传的文件是图片还是视频
-                if (file.raw.type.includes('image')){//图片
+                if (file.raw.type.includes('image')) {//图片
                     v.c.imgUrl = "";
-                }else{//视频
+                } else {//视频
                     v.c.videoUrl = "";
                 }
                 console.log(file, fileList);
@@ -294,12 +297,12 @@
 
             }
 
-            if (location.search.includes("id")){//代表修改
+            if (location.search.includes("id")) {//代表修改
                 //得到地址栏中的id
                 let id = new URLSearchParams(location.search).get("id");
                 //通过id查询详情并显示到页面中
-                axios.get("/v1/contents/"+id+"/update").then(function (response) {
-                    if (response.data.code==1){
+                axios.get("/v1/contents/" + id + "/update").then(function (response) {
+                    if (response.data.code == 1) {
                         v.c = response.data.data;
                         //更新富文本编辑器内容
                         editor.setHtml(v.c.content);
@@ -309,7 +312,6 @@
                     }
                 })
             }
-
 
 
         }

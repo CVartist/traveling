@@ -368,3 +368,28 @@ create table t_log
     comment '用户日志';
 
 SELECT id, user_name, nick_name, is_admin, img_url, password FROM t_user WHERE user_name = 'lxj'
+
+SELECT con.id,
+       con.title,
+       con.img_url,
+       con.type,
+       con.view_count,
+       con.comment_count,
+       con.brief,
+       con.create_time,
+       cat.name categoryName
+FROM t_content con
+         INNER JOIN t_category cat ON con.category_id = cat.id
+WHERE con.type = 1 AND con.create_by = 1
+LIMIT 10 OFFSET 10;
+
+
+create table t_banner
+(
+    id          bigint(11) auto_increment
+        primary key,
+    img_url     varchar(255) null,
+    sort        int          not null comment '排序',
+    create_time datetime     not null comment '创建时间'
+)
+    comment '轮播图表';

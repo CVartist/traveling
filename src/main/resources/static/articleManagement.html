@@ -42,9 +42,9 @@
                 </el-col>
                 <el-col span="20">
                     <el-card >
-                        <el-tabs v-model="type" type="border-card">
-                            <el-tab-pane name="1" label="食谱">
-                                <el-button type="primary" @click="location.href='postArticle.html?type=1'">发布食谱</el-button>
+                        <el-tabs v-model="type" type="border-card" @tab-click="() => { currentPage = 1; fetchData(); }">
+                            <el-tab-pane name="1" label="景点">
+                                <el-button type="primary" @click="location.href='postArticle.html?type=1'">发布景点</el-button>
                                 <el-table :data="recipeArr" border>
                                     <el-table-column label="标题" align="center"
                                                      width="150px" prop="title"></el-table-column>
@@ -73,8 +73,8 @@
 
                                 </el-table>
                             </el-tab-pane>
-                            <el-tab-pane name="2" label="视频">
-                                <el-button type="primary" @click="location.href='postArticle.html?type=2'">发布视频</el-button>
+                            <el-tab-pane name="2" label="美食">
+                                <el-button type="primary" @click="location.href='postArticle.html?type=2'">发布美食</el-button>
                                 <el-table :data="videoArr" border>
                                     <el-table-column label="标题" align="center"
                                                      width="150px" prop="title"></el-table-column>
@@ -101,8 +101,8 @@
 
                                 </el-table>
                             </el-tab-pane>
-                            <el-tab-pane name="3" label="资讯">
-                                <el-button type="primary" @click="location.href='postArticle.html?type=3'">发布资讯</el-button>
+                            <el-tab-pane name="3" label="游记">
+                                <el-button type="primary" @click="location.href='postArticle.html?type=3'">发布游记</el-button>
                                 <el-table :data="infoArr" border>
                                     <el-table-column label="标题" align="center"
                                                      width="150px" prop="title"></el-table-column>
@@ -128,13 +128,18 @@
                                             <el-button size="mini" type="danger" @click="handleDelete(scope.$index,scope.row)">删除</el-button>
                                         </template>
                                     </el-table-column>
-
                                 </el-table>
                             </el-tab-pane>
                         </el-tabs>
-
-
+                        <el-pagination
+                                @current-change="handleCurrentChange"
+                                :current-page="currentPage"
+                                :page-size="pageSize"
+                                :total="totalItems"
+                                layout="total, prev, pager, next, jumper">
+                        </el-pagination>
                     </el-card>
+
                 </el-col>
             </el-row>
 
@@ -199,32 +204,59 @@
                 recipeArr:[],
                 videoArr:[],
                 infoArr:[],
-                type:"1"
+                type:"1",
+                currentPage: 1, // 当前页码
+                pageSize: 10, // 每页显示数量
+                totalItems: 0 // 总项目数量
             }
         },
         methods: {
-            handleEdit(i,c){
-                location.href = "/postArticle.html?type="+c.type+"&id="+c.id;
+            handleCurrentChange(page) {
+                this.currentPage = page;
+                this.fetchData(); // 重新获取数据
             },
-            handleDelete(i,c){
-                if (confirm("您确认删除此内容吗?")){
-                    axios.post("/v1/contents/"+c.id+"/delete").then(function (response) {
-                        if (response.data.code==1){
-                            v.$message.success("删除完成!");
-                            if (c.type==1){
-                                v.recipeArr.splice(i,1);
-                            }else if(c.type==2){
-                                v.videoArr.splice(i,1);
-                            }else{
-                                v.infoArr.splice(i,1);
+            fetchData() {
+                axios.get(`/v1/contents/${this.type}/management?page=${this.currentPage - 1}&size=${this.pageSize}`)
+                    .then(response => {
+                        if (response.data.code == 1) {
+                            if (this.type === "1") {
+                                this.recipeArr = response.data.data; // 更新景点数据
+                            } else if (this.type === "2") {
+                                this.videoArr = response.data.data; // 更新美食数据
+                            } else if (this.type === "3") {
+                                this.infoArr = response.data.data; // 更新游记数据
                             }
+                            this.totalItems = response.data.total; // 更新总项数
+                        } else {
+                            console.error("Error fetching data:", response.data.message);
                         }
                     })
+                    .catch(error => {
+                        console.error("API request failed:", error);
+                    });
+            }, // 这里加上逗号
+            handleEdit(i, c) {
+                location.href = "/postArticle.html?type=" + c.type + "&id=" + c.id;
+            },
+            handleDelete(i, c) {
+                if (confirm("您确认删除此内容吗?")) {
+                    axios.post("/v1/contents/" + c.id + "/delete").then(function (response) {
+                        if (response.data.code == 1) {
+                            v.$message.success("删除完成!");
+                            if (c.type == 1) {
+                                v.recipeArr.splice(i, 1);
+                            } else if (c.type == 2) {
+                                v.videoArr.splice(i, 1);
+                            } else {
+                                v.infoArr.splice(i, 1);
+                            }
+                        }
+                    });
                 }
             },
-            handleSelect(key,keyPath){
-                if (key==1){
-                    location.href="personal.html";
+            handleSelect(key, keyPath) {
+                if (key == 1) {
+                    location.href = "personal.html";
                 }
             },
             handleRemove(file, fileList) {
@@ -234,13 +266,13 @@
                 this.dialogImageUrl = file.url;
                 this.dialogVisible = true;
             }
-
         },
         created:function () {
             if (location.search.includes("type")){
                 //把地址栏中的type取出
                 this.type = new URLSearchParams(location.search).get("type");
             }
+            this.fetchData(); // 初始化时加载数据
             //请求所有食谱
             axios.get("/v1/contents/1/management").then(function (response) {
                 if (response.data.code==1){

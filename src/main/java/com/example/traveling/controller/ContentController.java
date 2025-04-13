@@ -58,10 +58,24 @@ public class ContentController {
         return JsonResult.ok();
     }
 
+//    @GetMapping("{type}/management")
+//    public JsonResult management(@PathVariable Integer type,
+//                                 @AuthenticationPrincipal CustomUserDetails details) {
+//        return JsonResult.ok(contentMapper.selectByType(type, details.getId()));
+//    }
+
     @GetMapping("{type}/management")
     public JsonResult management(@PathVariable Integer type,
+                                 @RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "10") int size,
                                  @AuthenticationPrincipal CustomUserDetails details) {
-        return JsonResult.ok(contentMapper.selectByType(type, details.getId()));
+        // 计算 offset
+        int offset = page * size;
+
+        List<ContentManagementVO> contents = contentMapper.selectByType(type, details.getId(), size, offset);
+        Long total = (long) contentMapper.countByType(type, details.getId());
+
+        return JsonResult.ok(contents, total);
     }
 
     @GetMapping("{type}/{categoryId}/index")

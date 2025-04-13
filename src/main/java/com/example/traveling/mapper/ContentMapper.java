@@ -24,8 +24,9 @@ public interface ContentMapper {
      * @param id   用户id
      * @return 稿件集合
      */
-    List<ContentManagementVO> selectByType(Integer type, Long id);
-//    List<ContentManagementVO> selectByType(Integer type, Long id, int offset, int limit);
+//    List<ContentManagementVO> selectByType(Integer type, Long id);
+    List<ContentManagementVO> selectByType(Integer type, Long id, int size, int offset);
+    int countByType(Integer type, Long id);
     /**
      * 编辑稿件时,根据稿件的id查询稿件信息
      *

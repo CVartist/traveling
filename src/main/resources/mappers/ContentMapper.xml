@@ -29,6 +29,21 @@
     所以SQL中cat.name 必须起别名为categoryName,否则MyBatis自动注入不进去,
     并且此处的SQL是当前用户查询自己的类别稿件,所以需要根据create_by字段约束
     -->
+<!--    <select id="selectByType" resultType="com.example.traveling.pojo.vo.ContentManagementVO">-->
+<!--        SELECT con.id,-->
+<!--               con.title,-->
+<!--               con.img_url,-->
+<!--               con.type,-->
+<!--               con.view_count,-->
+<!--               con.comment_count,-->
+<!--               con.brief,-->
+<!--               con.create_time,-->
+<!--               cat.name categoryName-->
+<!--        FROM t_content con-->
+<!--                 INNER JOIN t_category cat ON con.category_id = cat.id-->
+<!--        WHERE con.type = #{type} AND con.create_by = #{id}-->
+<!--    </select>-->
+
     <select id="selectByType" resultType="com.example.traveling.pojo.vo.ContentManagementVO">
         SELECT con.id,
                con.title,
@@ -38,9 +53,17 @@
                con.comment_count,
                con.brief,
                con.create_time,
-               cat.name categoryName
+               cat.name AS categoryName
         FROM t_content con
                  INNER JOIN t_category cat ON con.category_id = cat.id
+        WHERE con.type = #{type}
+          AND con.create_by = #{id}
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <select id="countByType" resultType="int">
+        SELECT COUNT(*)
+        FROM t_content con
         WHERE con.type = #{type} AND con.create_by = #{id}
     </select>
     <!--

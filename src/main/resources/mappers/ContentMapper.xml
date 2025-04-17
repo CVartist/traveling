@@ -149,11 +149,22 @@
                c.type,
                c.view_count,
                c.comment_count,
+               c.like_count,
                c.create_time,
                c.brief,
                u.nick_name,
                u.img_url userImgUrl,
-               u.id      userId
+               u.id      userId,
+               c.like_count,
+               c.place,
+               c.address,
+               c.comment_score,
+               c.sight_level,
+               c.market_price,
+               c.discount,
+               c.price,
+               c.open_time,
+               c.open_status
         FROM t_content c
                  INNER JOIN t_user u ON c.create_by = u.id
         WHERE c.id = #{id}

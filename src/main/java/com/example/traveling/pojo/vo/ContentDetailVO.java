@@ -33,6 +33,10 @@ public class ContentDetailVO {
      */
     private Integer viewCount;
     /**
+     * 点赞量,评论量默认为0
+     */
+    private Integer likeCount;
+    /**
      * 评论量,新发布的稿件,评论量默认为0
      */
     private Integer commentCount;
@@ -59,4 +63,26 @@ public class ContentDetailVO {
      * 为了后面方便查询作者的其他文章
      */
     private Long userId;
+
+    private String place;
+
+    private String address;
+
+    private String commentScore;
+
+    private String sightLevel;
+
+    private String marketPrice;
+
+    private String discount;
+
+    private String price;
+
+    private String openTime;
+
+    private String openStatus;
+
+
+
+
 }

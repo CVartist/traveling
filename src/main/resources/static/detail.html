@@ -55,22 +55,36 @@
                         {{c.title}}
                     </h2>
                     <p style="font-size: 12px;color: #666;text-align: center ">
-                        作者:{{c.nickName}} | 发布时间:{{c.createTime}} | 阅读次数:{{c.viewCount}}
+                        作者:{{c.nickName}} | 发布时间:{{c.createTime}}
                     </p>
                     <el-divider></el-divider>
-                    <div v-if="c.type != 2">
+                    <div>
+                        <p>
+                            <span v-if="c.viewCount">阅读次数: {{ c.viewCount }}</span>
+                            <span v-if="c.likeCount"> | 喜欢: {{ c.likeCount }}</span>
+                            <span v-if="c.commentCount"> | 评论量: {{ c.commentCount }}</span>
+                            <span v-if="c.commentScore"> | 评分: {{ c.commentScore }} 分</span>
+                            <span v-if="c.sightLevel"> | 景区级别: {{ c.sightLevel }} </span>
+                            <span v-if="c.marketPrice"> | 市场价: {{ c.marketPrice }} </span>
+                            <span v-if="c.discount"> | 优惠: {{ c.discount }} </span>
+                            <span v-if="c.price"> | 现价: {{ c.price }} </span>
+                            <span v-if="c.openTime"> | 开放时间: {{ c.openTime }} </span>
+                        </p>
                         <el-card style="font-size: 12px;">
                             <b style="color: #409EFF">摘要:</b>
                             {{ c.brief }}
                         </el-card>
-                        <p v-html="c.content"></p>
+<!--                        <p v-html="c.content"></p>-->
+                        <p v-if="c.place">位置:{{ c.place }}</p>
+                        <p v-if="c.address">地址:{{ c.address }}</p>
+                        <p v-if="c.content">{{ c.content }}</p>
                         <!-- 图片展示 -->
                         <img v-if="c.imgUrl" :src="c.imgUrl" alt="文章图片" style="width: 100%; margin-top: 10px;">
                     </div>
-                    <div v-else>
-                        <video style="width: 100%" :src="c.videoUrl"
-                        controls type="video/mp4"></video>
-                    </div>
+<!--                    <div v-else>-->
+<!--                        <video style="width: 100%" :src="c.videoUrl"-->
+<!--                        controls type="video/mp4"></video>-->
+<!--                    </div>-->
                 </el-card>
                 <!--评论相关开始-->
                 <el-card>

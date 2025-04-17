@@ -16,9 +16,9 @@
     brief的值不需要我们处理,前端页面会自动截取正文content的前50个字
     -->
     <insert id="insert">
-        INSERT INTO t_content (title, img_url, video_url, content, type, view_count, comment_count, create_by,
+        INSERT INTO t_content (title, img_url, video_url, content, type, view_count, comment_count,like_count, create_by,
                                create_time, brief, category_id)
-        VALUES (#{title}, #{imgUrl}, #{videoUrl}, #{content}, #{type}, 0, 0, #{createBy}, #{createTime}, #{brief},
+        VALUES (#{title}, #{imgUrl}, #{videoUrl}, #{content}, #{type}, 0, 0,0, #{createBy}, #{createTime}, #{brief},
                 #{categoryId})
     </insert>
 

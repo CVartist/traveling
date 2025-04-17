@@ -92,7 +92,7 @@
                                 <!--***************上传组件结束******************-->
                             </el-form-item>
 
-                            <el-form-item v-show="c.type==2" label="视频">
+                            <el-form-item label="视频">
                                 <!--***************上传组件开始******************-->
                                 <el-upload
                                         action="/v1/upload"
@@ -107,7 +107,7 @@
                                 </el-upload>
                                 <!--***************上传组件结束******************-->
                             </el-form-item>
-                            <el-form-item v-show="c.type!=2" label="文章内容">
+                            <el-form-item label="文章内容">
                                 <!--***********富文本编辑器开始************-->
                                 <div style="border: 1px solid #ccc">
                                     <div id="toolbar-container" style="border-bottom: 1px solid #ccc;">
@@ -181,9 +181,10 @@
 <!-- import Vue before Element -->
 <script src="https://cdn.staticfile.org/vue/2.6.14/vue.min.js"></script>
 <!-- import JavaScript -->
-<script src="https://cdn.staticfile.org/element-ui/2.15.9/index.min.js"></script>
-<!--引入富文本编辑器相关的js文件-->
 <script src="js/index.min.js"></script>
+<!--引入富文本编辑器相关的js文件-->
+<!--引入富文本编辑器相关的js文件-->
+<script src="https://cdn.staticfile.org/wangeditor5/5.1.23/index.min.js"></script>
 <!--引入Axios-->
 <script src="js/axios.min.js"></script>
 <script src="js/my-header.js"></script>
@@ -204,10 +205,6 @@
         },
         methods: {
             post() {
-                if (v.c.type == 2 && v.c.videoUrl == "") {
-                    v.$message.error("请选择视频文件!");
-                    return;
-                }
                 if (v.c.imgUrl == "") {
                     v.$message.error("请选择封面!");
                     return;

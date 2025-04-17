@@ -211,7 +211,10 @@ where type = 1;
 select * from t_content where type = 1;
 select * from t_content where type = 2;
 select * from t_content where type = 3;
-
+select * from t_content where title = 'wwwww22222';
+SELECT id, title, img_url, video_url, content, type, category_id, create_by FROM t_content WHERE id = 23460;
+DELETE cn, cm FROM t_comment cm JOIN t_content cn ON cn.id = cm.content_id WHERE cn.id = 23460;
+DELETE cm FROM t_comment cm WHERE cm.content_id = 23460;
 SELECT con.id, con.title, con.img_url, con.type, con.view_count, con.comment_count, con.brief,
        con.create_time, cat.name AS categoryName FROM t_content con INNER JOIN t_category cat
            ON con.category_id = cat.id WHERE con.type = 3 AND con.create_by = 1 LIMIT 10 OFFSET 0;

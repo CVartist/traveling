@@ -77,7 +77,7 @@
 <!--                        <p v-html="c.content"></p>-->
                         <p v-if="c.place">位置:{{ c.place }}</p>
                         <p v-if="c.address">地址:{{ c.address }}</p>
-                        <p v-if="c.content">{{ c.content }}</p>
+                        <p v-if="c.content" v-html="c.content">{{ c.content }}</p>
                         <!-- 图片展示 -->
                         <img v-if="c.imgUrl" :src="c.imgUrl" alt="文章图片" style="width: 100%; margin-top: 10px;">
                     </div>

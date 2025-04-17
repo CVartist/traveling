@@ -175,6 +175,16 @@
         },
         created: function () {
             this.fetchData(this.currentPage); // 初始加载第一页
+
+            //判断是否包含wd
+            if (location.search.includes("wd")){
+                let wd = new URLSearchParams(location.search).get("wd");
+                axios.get("/v1/contents/"+wd+"/search").then(function (response) {
+                    if (response.data.code==1){
+                        v.contentArr = response.data.data;
+                    }
+                })
+            }
         }
     })
 </script>
